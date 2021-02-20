@@ -6,3 +6,5 @@ to be embedded into EWMH window managers. Its feature set was modeled after
 the basic tiling features of XMonad.
 
 To install PyTyle, download this repository and run `./setup.py install` as root.
+
+![Screenshot](screenshot.png)
