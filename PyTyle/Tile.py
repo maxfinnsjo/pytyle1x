@@ -1,4 +1,4 @@
-"""
+'''
 Tile.py
 
 Tile is the guts of the tiling algorithm. It actually does *most* of the heavy
@@ -17,7 +17,7 @@ accordingly in two of TileDefault's subclasses: Horizontal and Vertical.
 
 To create your own tiling algorithm, read the comments in this file, along with
 Tilers/TileDefault.py, Tilers/Horizontal.py, and Tilers/Vertical.py.
-"""
+'''
 
 import sys, os, time
 
@@ -55,7 +55,7 @@ class Tile:
     def dispatch(tiler, action=None, keycode=None, masks=None):
         if not action and keycode and masks:
             if keycode not in State.get_dispatcher():
-                print("Keycode %s is not bound" % keycode, file = sys.stderr)
+                print('Keycode %s is not bound' % keycode, file = sys.stderr)
                 return
 
             # Now we need to determine which masks were used...
@@ -63,7 +63,7 @@ class Tile:
                 action = State.get_dispatcher()[keycode][masks]
             else:
                 print(
-                    "Keycode %s and keymask %d not bound" % (keycode, masks),
+                    'Keycode %s and keymask %d not bound' % (keycode, masks),
                     file = sys.stderr
                 )
                 return
@@ -102,7 +102,7 @@ class Tile:
     # preclude their customization. Simply overload whichever method that needs customizing
     # in your tiling class. (_tile, _cycle, _master_increase, _master_decrease should be
     # sufficient here. Along with the helper methods help_find_next and help_find_previous.)
-    # We also initialize this tiler's "state"- this will automatically save certain things for
+    # We also initialize this tiler's 'state'- this will automatically save certain things for
     # us, like the sizes of panes.
     #
     def __init__(self, screen):
@@ -489,7 +489,7 @@ class Tile:
     # do some house keeping before hand.
     #
     # These should not be overloaded, but rather their equivalent member methods
-    # preceded with an "_" should be overloaded to customize your tiling algorithm.
+    # preceded with an '_' should be overloaded to customize your tiling algorithm.
     #
     # You can get cursory information about these methods from the configuration
     # file, or you may peruse their comments above (in this class), and/or may

@@ -1,11 +1,11 @@
-"""
+'''
 Desktop.py
 
 A simple class to manage all desktops. It also includes a static
 initialization method that will load all desktops reported by the
 window manager. Each physical screen is initialized for each desktop.
 This is also where tilers are initially set to screens.
-"""
+'''
 
 from PyTyle.Config import Config
 from PyTyle.State import State
@@ -54,7 +54,7 @@ class Desktop:
                         screen.needs_tiling()
 
     #
-    # Same as "load_desktops" except we're just refreshing their information.
+    # Same as 'load_desktops' except we're just refreshing their information.
     #
     @staticmethod
     def reload_desktops():
@@ -87,7 +87,7 @@ class Desktop:
 
     #
     # Probes X for all available viewports. For every desktop, an instance
-    # of each viewport is newly created. (So the total number of "screens"
+    # of each viewport is newly created. (So the total number of 'screens'
     # in PyTyle is # of physical screens * viewports * desktops.)
     #
     def load_viewports(self):

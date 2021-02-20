@@ -1,4 +1,4 @@
-"""
+'''
 Config.py
 
 A simple container class for the configuration of PyTyle. See pytylerc
@@ -10,7 +10,7 @@ available tiling algorithms (as Python modules).
 
 There is also a getter method here, just in case we're looking for an
 option that isn't specified in the config.
-"""
+'''
 
 class Config:
     #------------------------------------------------------------------------------

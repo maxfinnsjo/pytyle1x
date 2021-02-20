@@ -1,9 +1,9 @@
-"""
+'''
 Viewport.py
 
 The Viewport class will handle all viewport related functionality. For instance,
 it provides methods to detect if a given window is on its viewport.
-"""
+'''
 
 from PyTyle.State import State
 from PyTyle.Probe import PROBE
@@ -56,7 +56,7 @@ class Viewport:
     #
     # Probes X (using xinerama) for all available screens. For every viewport,
     # an instance of each screen is newly created. (So the total number of
-    # "screens" in PyTyle is # of physical screens * viewports * desktops.) We
+    # 'screens' in PyTyle is # of physical screens * viewports * desktops.) We
     # do *not* queue screens for tiling here.
     #
     def load_screens(self):

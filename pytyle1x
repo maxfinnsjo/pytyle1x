@@ -1,14 +1,12 @@
 #!/usr/bin/env python3
 
-"""
-pytyle
-
+'''
 PyTyle is meant to be run as a daemon, that is, in the background. If you're
 trying it out, feel free to run it in a terminal (especially if it isn't working
 properly, it could be outputting some useful error messages). I personally
 added PyTyle to my ~/.xinitrc like so:
 
-    pytyle &
+    pytyle1x &
 
 The entire source code of PyTyle is *HEAVILY* documented. Why? Because there
 aren't too many things I hate worse than undocumented code. I also love to
@@ -26,12 +24,10 @@ Anyway, if you're looking at PyTyle because it does something with python-xlib
 that you want to know how to do (and I only say this because I did this myself
 with many a different programs), then search no further than Probe.py and
 possibly Event.py. No other files interface with python-xlib.
-"""
+'''
 
-# Some basics...
 import time, sys, os, traceback, pathlib
 
-# What we need.
 from PyTyle.Config import Config
 from PyTyle.State import State
 from PyTyle.Probe import PROBE
@@ -41,10 +37,12 @@ from PyTyle.Window import Window
 from PyTyle.Event import Event
 from PyTyle.Tile import Tile
 
+
 def reloadTilers():
     for module in Config.misc('tilers'):
-        tmp = __import__('PyTyle.Tilers.' + module, fromlist=[''])
+        tmp = __import__('PyTyle.Tilers.' + module, fromlist = [''])
         Config.TILERS[module] = tmp.CLASS
+
 
 def reloadConfig():
     conPath = str(pathlib.Path.home()) + '/.pytylerc'
@@ -53,6 +51,7 @@ def reloadConfig():
             exec(conFile.read())
     except FileNotFoundError:
         DEBUG.write('Configuration file ~/.pytylerc does not exist')
+
 
 # Before moving on, we must make sure the window
 # manager is running. If not, wait for it.
@@ -63,8 +62,10 @@ if not PROBE.is_wm_running():
             time.sleep(1)
             break
 
+
 # load configuration
 reloadConfig()
+
 
 try:
     # initialize the tilers dynamically, so all we need to do
@@ -105,11 +106,11 @@ try:
             # Reload our key bindings
             #
             # Note: It seems like X keeps our previous key bindings
-            # even though we "ungrab" them only after we attempt to
+            # even though we 'ungrab' them only after we attempt to
             # regrab the rest of the keybindings. This will thus spit
             # out an error if run from the command line, but otherwise
             # full functionality is here. I suppose the only problem
-            # might arise if you were trying to "free up" a key. You
+            # might arise if you were trying to 'free up' a key. You
             # might need to restart PyTyle for that.
             State.unregister_hotkeys()
             State.register_hotkeys()
@@ -121,7 +122,7 @@ try:
         # This is our queue of tilings that we need to flush.
         # Screens are queued for tiling when windows change,
         # disappear, popup, etc. We almost never make direct
-        # calls to the Tile.tile method, and instead "tell"
+        # calls to the Tile.tile method, and instead 'tell'
         # the screen that it needs to be retiled.
         if State.queue_has_screens():
             while State.queue_has_screens():
@@ -136,9 +137,14 @@ try:
         # dispatcher to run the proper tiling action.
         if e.is_keypress():
             try:
-                Tile.dispatch(State.get_desktop()._VIEWPORT._SCREEN.get_tiler(), None, e.get_keycode(), e.get_masks())
+                Tile.dispatch(
+                    State.get_desktop()._VIEWPORT._SCREEN.get_tiler(),
+                    None,
+                    e.get_keycode(),
+                    e.get_masks()
+                )
             except:
-                DEBUG.write("Could not complete key press request")
+                DEBUG.write('Could not complete key press request')
                 DEBUG.write(traceback.format_exc())
 
         # If a window receives focus or changes to another
@@ -160,7 +166,7 @@ try:
             try:
                 Window.load_new_windows()
             except:
-                DEBUG.write("Could not tile new window - could be a popup that disappear")
+                DEBUG.write('Could not tile new window - could be a popup?')
                 DEBUG.write(traceback.format_exc())
                 continue
 
@@ -171,13 +177,13 @@ try:
                     if int(win.id, 0) not in newwins:
                         win.delete()
             except:
-                DEBUG.write("Could not properly handle window destruction")
+                DEBUG.write('Could not properly handle window destruction')
                 DEBUG.write(traceback.format_exc())
                 continue
 
         # A window changes when it's resized/moved, or when its
         # desktop property changes. In those cases, we want to
-        # "refresh" the window with its real and current state.
+        # 'refresh' the window with its real and current state.
         #
         # Note: Window.refresh() will do only as much work as
         # is needed. It is guaranteed to query X for the current
@@ -190,7 +196,7 @@ try:
                     print(e._event)
                     State.get_windows()[e.get_window_id()].refresh()
             except:
-                DEBUG.write("Could not properly handle window changing event (moved/resized/desktop change)")
+                DEBUG.write('Could not properly handle window changing event (moved/resized/desktop change)')
                 DEBUG.write(traceback.format_exc())
 
         # If a window's state changes, we need to find it in PyTyle
@@ -201,10 +207,10 @@ try:
                 if e.get_window_id() in State.get_windows():
                     State.get_windows()[e.get_window_id()].refresh()
             except:
-                DEBUG.write("Could not properly handle window state event (iconified?)")
+                DEBUG.write('Could not properly handle window state event (iconified?)')
                 DEBUG.write(traceback.format_exc())
 
-        # Detects if the "_NET_WORKAREA" property changed. Meaning
+        # Detects if the '_NET_WORKAREA' property changed. Meaning
         # that the available workspace is changed.
         #
         # Note: Sometimes we get a property changed event when it
@@ -216,7 +222,7 @@ try:
             try:
                 Desktop.refresh_desktops()
             except:
-                DEBUG.write("Could not properly handle workarea change")
+                DEBUG.write('Could not properly handle workarea change')
                 DEBUG.write(traceback.format_exc())
 
         elif e.is_client_message():
@@ -224,16 +230,15 @@ try:
             if callback:
                 Tile.dispatch(State.get_desktop()._VIEWPORT._SCREEN.get_tiler(), callback)
             else:
-                DEBUG.write("Got unknown client message.")
-                DEBUG.write("payload: %s." % e.get_client_payload())
+                DEBUG.write('Got unknown client message.')
+                DEBUG.write('payload: %s.' % e.get_client_payload())
 
-        # Detects if the "_NET_DESKTOP_GEOMETRY" property changed.
+        # Detects if the '_NET_DESKTOP_GEOMETRY' property changed.
         # Meaning the number of screens changed probably, so
         # we need to refresh our image of the current State.
         elif e.is_screen_change():
-            DEBUG.write("Wiping the current state...")
+            DEBUG.write('Wiping the current state...')
 
-            # We should wait a little bit longer here...
             time.sleep(3)
 
             try:
@@ -242,9 +247,9 @@ try:
                 Window.load_new_windows()
                 State.reload_active()
             except:
-                DEBUG.write("Could not properly handle screen change")
+                DEBUG.write('Could not properly handle screen change')
                 DEBUG.write(traceback.format_exc())
 except:
-    DEBUG.write("Fatal error")
+    DEBUG.write('Fatal error')
     DEBUG.write(traceback.format_exc())
     sys.exit(0)

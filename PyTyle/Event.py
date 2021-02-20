@@ -1,4 +1,4 @@
-"""
+'''
 Event.py
 
 This class, along with Probe, are the only two classes interfacing
@@ -8,7 +8,7 @@ Event handles all event related information. Each instance is a
 separate event sent from X.
 
 Most of the function of this class is to encapsulate event information.
-"""
+'''
 
 from PyTyle.Probe import PROBE
 from PyTyle.Debug import DEBUG
@@ -44,7 +44,7 @@ class Event:
         return None
 
     #
-    # The key "state" is a bit mask of which modifiers were pressed when the key
+    # The key 'state' is a bit mask of which modifiers were pressed when the key
     # was hit. See get_masks.
     #
     def get_key_state(self):
@@ -84,7 +84,7 @@ class Event:
     # Reports whether this event is an active window changing event.
     #
     def is_active_change(self):
-        if self._event and self._event.type == X.PropertyNotify and self._event.atom == PROBE.atom("_NET_ACTIVE_WINDOW"):
+        if self._event and self._event.type == X.PropertyNotify and self._event.atom == PROBE.atom('_NET_ACTIVE_WINDOW'):
             return True
         return False
 
@@ -95,7 +95,7 @@ class Event:
     # _NET_ACTIVE_WINDOW instead. Will investigate more later.
     #
     def is_desktop_change(self):
-        if self._event and self._event.type == X.PropertyNotify and (self._event.atom == PROBE.atom("_NET_CURRENT_DESKTOP") or self._event.atom == PROBE.atom("_NET_DESKTOP_VIEWPORT")):
+        if self._event and self._event.type == X.PropertyNotify and (self._event.atom == PROBE.atom('_NET_CURRENT_DESKTOP') or self._event.atom == PROBE.atom('_NET_DESKTOP_VIEWPORT')):
             return True
         return False
 
@@ -103,7 +103,7 @@ class Event:
     # Reports whether this is a clientMessage.
     #
     def is_client_message(self):
-        if self._event and self._event.type == X.ClientMessage and self._event.client_type == PROBE.atom("_PYTYLE_REMOTE"):
+        if self._event and self._event.type == X.ClientMessage and self._event.client_type == PROBE.atom('_PYTYLE_REMOTE'):
             return True
         return False
 
@@ -139,7 +139,7 @@ class Event:
     # _NET_DESKTOP_GEOMETRY property.
     #
     def is_screen_change(self):
-        if self._event and self._event.type == X.PropertyNotify and (self._event.atom == PROBE.atom("_NET_DESKTOP_GEOMETRY") or self._event.atom == PROBE.atom("_NET_NUMBER_OF_DESKTOPS")):
+        if self._event and self._event.type == X.PropertyNotify and (self._event.atom == PROBE.atom('_NET_DESKTOP_GEOMETRY') or self._event.atom == PROBE.atom('_NET_NUMBER_OF_DESKTOPS')):
             return True
         return False
 
@@ -149,7 +149,7 @@ class Event:
     # its information and tell the screen it needs to be retiled.
     #
     def is_state_change(self):
-        if self._event and self._event.type == X.PropertyNotify and self._event.atom == PROBE.atom("WM_STATE"):
+        if self._event and self._event.type == X.PropertyNotify and self._event.atom == PROBE.atom('WM_STATE'):
             return True
         return False
 
@@ -158,7 +158,7 @@ class Event:
     # Useful for detecting add/removal of windows.
     #
     def is_windowlist_change(self):
-        if self._event and self._event.type == X.PropertyNotify and self._event.atom == PROBE.atom("_NET_CLIENT_LIST"):
+        if self._event and self._event.type == X.PropertyNotify and self._event.atom == PROBE.atom('_NET_CLIENT_LIST'):
             return True
         return False
 
@@ -170,7 +170,7 @@ class Event:
     # the mouse, keyboard, desktop switch key, etc).
     #
     def is_window_change(self):
-        if self._event and ((self._event.type == X.ConfigureNotify and self._event.event != PROBE.get_root()) or (self._event.type == X.PropertyNotify and self._event.atom == PROBE.atom("_NET_WM_DESKTOP"))):
+        if self._event and ((self._event.type == X.ConfigureNotify and self._event.event != PROBE.get_root()) or (self._event.type == X.PropertyNotify and self._event.atom == PROBE.atom('_NET_WM_DESKTOP'))):
             return True
         return False
 
@@ -204,6 +204,6 @@ class Event:
     # been added to the screen).
     #
     def is_workarea_change(self):
-        if self._event and self._event.type == X.PropertyNotify and self._event.atom == PROBE.atom("_NET_WORKAREA"):
+        if self._event and self._event.type == X.PropertyNotify and self._event.atom == PROBE.atom('_NET_WORKAREA'):
             return True
         return False

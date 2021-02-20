@@ -1,11 +1,11 @@
-"""
+'''
 Screen.py
 
 The Screen class will handle all screen related functionality. For instance,
 it provides methods to detect if a given window is on its screen. Also, it
 will keep track of its state; like if it needs to be tiled, has tiling
 enabled/disable, and of course, its current tiling algorithm.
-"""
+'''
 
 from PyTyle.Config import Config
 from PyTyle.State import State
@@ -101,7 +101,7 @@ class Screen:
     # place to tinker! (If the configuration file isn't enough power.)
     #
     def get_workarea(self):
-        # If we have one screen, look for a "Screen 0" config
+        # If we have one screen, look for a 'Screen 0' config
         # and use it if it exists...
         if len(self.viewport.screens) == 1:
             if 0 in Config.WORKAREA:
@@ -135,7 +135,7 @@ class Screen:
         return (x, y, width, height)
 
     #
-    # This is used whenever the screen's tiler calls the "tile" method. It
+    # This is used whenever the screen's tiler calls the 'tile' method. It
     # tells the screen that everything is find and dandy, like sour candy.
     #
     def got_tiling(self):

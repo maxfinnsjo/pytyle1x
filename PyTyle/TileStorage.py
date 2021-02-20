@@ -1,4 +1,4 @@
-"""
+'''
 TileStorage.py
 
 My attempt at abstracting the storage of windows for tiling algorithms.
@@ -10,13 +10,13 @@ windows become masters or slaves (unless you need to).
 
 This is also where we run our filter specified in the configuration.
 (Should this be moved to load_window?) This is also where we decide to
-show/hide hidden windows. Namely, you can "add" a window to the tiling
+show/hide hidden windows. Namely, you can 'add' a window to the tiling
 storage, and it's possible that it won't be added. That is intentional.
 
 Remember, if a window isn't in the storage, it will *not* be tiled. While
 it will have a place in PyTyle, the tiling algorithm will not be able
 to see it.
-"""
+'''
 
 class TileStorage:
     #------------------------------------------------------------------------------

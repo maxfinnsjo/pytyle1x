@@ -1,4 +1,4 @@
-"""
+'''
 State.py
 
 Keeps a record of everything going on in the outside world. It keeps track
@@ -13,7 +13,7 @@ a queue, and periodically, after certain things have happened (eg., a window
 was hidden), a screen will be queued up.
 
 State also serves to initialize hot keys and scans for new windows.
-"""
+'''
 
 from PyTyle.Config import Config
 from PyTyle.Probe import PROBE
@@ -157,7 +157,7 @@ class State:
 
     #
     # Adds a screen to the tiling queue. (You shouldn't use this method
-    # directly to queue up a screen, but rather, the "needs_tiling" method
+    # directly to queue up a screen, but rather, the 'needs_tiling' method
     # in the Screen class.)
     #
     @staticmethod
@@ -193,7 +193,7 @@ class State:
             # No key?
             if not key:
                 print(
-                    "Could not map %s to %s" % (mapping, callback),
+                    'Could not map %s to %s' % (mapping, callback),
                     file = sys.stderr
                 )
                 continue
@@ -206,7 +206,7 @@ class State:
             try:
                 PROBE.grab_key(keycode, modmask)
             except:
-                print("Nada:", callback)
+                print('Nada:', callback)
 
             # Finally register the key with the dispatcher...
             State.register_hotkey(keycode, modmask, callback)
@@ -291,7 +291,7 @@ class State:
             # No key?
             if not key:
                 print(
-                    "Could not map %s to %s" % (mapping, callback),
+                    'Could not map %s to %s' % (mapping, callback),
                     file = sys.stderr
                 )
                 continue
@@ -304,7 +304,7 @@ class State:
             try:
                 PROBE.ungrab_key(keycode, modmask)
             except:
-                print("Nada:", callback)
+                print('Nada:', callback)
 
         # And finally reset the dispatcher...
         State._DISPATCHER = {}

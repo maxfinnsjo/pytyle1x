@@ -1,8 +1,8 @@
-"""
+'''
 Debug.py
 
 A very simple class to log messages.
-"""
+'''
 
 import time, os, sys
 from PyTyle.Config import Config

@@ -1,11 +1,11 @@
-"""
+'''
 TileState.py
 
 Keeps a record of the state of your tiler. This is helpful for automatically
 keeping window sizes consistent when new windows are added, removed, etc.
 
 TileState also interfaces with the LAYOUT config.
-"""
+'''
 
 from PyTyle.Config import Config
 

@@ -1,65 +1,62 @@
-"""
+'''
 .pytylerc
 
 Example configuration file for PyTyle. See below for further instructions.
-"""
 
-"""
 IMPORTANT!
-
 This *IS* a Python file, and therefore, it must be valid Python syntax.
-If you get the syntax wrong here, PyTyle will not start.
-"""
+If you get the syntax wrong here, PyTyle will crash.
+'''
 
 
 #------------------------------------------------------------------------------
 # MISCELLANEOUS OPTIONS
 #------------------------------------------------------------------------------
 Config.MISC = {
-               # This is a list of all available tilers. If a tiler
-               # is not listed here, it cannot be used. They are
-               # loaded when PyTyle starts.
-               'tilers': ['Vertical', 'Horizontal', 'HorizontalRows', 'Maximal', 'Cascade'],
+    # This is a list of all available tilers. If a tiler
+    # is not listed here, it cannot be used. They are
+    # loaded when PyTyle starts.
+    'tilers': ['Vertical', 'Horizontal', 'HorizontalRows', 'Maximal', 'Cascade'],
 
-               # Enables tiling for all desktops/viewports/screens upon
-               # PyTyle startup. Desktops et al can still be disabled from
-               # tiling by issuing the "untile" command. Default layouts
-               # specified below will still be used.
-               'global_tiling': False,
+    # Enables tiling for all desktops/viewports/screens upon
+    # PyTyle startup. Desktops et al can still be disabled from
+    # tiling by issuing the 'untile' command. Default layouts
+    # specified below will still be used.
+    'global_tiling': False,
 
-               # This timeout is used several times in the main event
-               # loop. It is the amount of time (seconds) we wait, for
-               # example, between when a new window is created and when
-               # we scan for new windows. I imagine that if you have a
-               # slower system, you might want to increase this.
-               #
-               # Note: Using a timeout seems like a hack. Any better
-               # ideas?
-               #
-               # Note 2: I tested this on my P3 1.0 GHz with 128MB
-               # of memory, and this value worked fine.
-               'timeout': 0.1,
+    # This timeout is used several times in the main event
+    # loop. It is the amount of time (seconds) we wait, for
+    # example, between when a new window is created and when
+    # we scan for new windows. I imagine that if you have a
+    # slower system, you might want to increase this.
+    #
+    # Note: Using a timeout seems like a hack. Any better
+    # ideas?
+    #
+    # Note 2: I tested this on my P3 1.0 GHz with 128MB
+    # of memory, and this value worked fine.
+    'timeout': 0.1,
 
-               # Toggles window decorations. I do not recommend
-               # currently disabling window decorations, as it's
-               # quite experimental. It could also be removed in the
-               # future, because without decorations, it is difficult
-               # to tell which window is active (usually).
-               #
-               # Note: I haven't researched this yet, but how easy is
-               # it to draw borders around windows (XMonad style)?
-               'decorations': True,
+    # Toggles window decorations. I do not recommend
+    # currently disabling window decorations, as it's
+    # quite experimental. It could also be removed in the
+    # future, because without decorations, it is difficult
+    # to tell which window is active (usually).
+    #
+    # Note: I haven't researched this yet, but how easy is
+    # it to draw borders around windows (XMonad style)?
+    'decorations': True,
 
-               # This setting should reflect whether or not you have
-               # decorations enabled or disabled from the *WINDOW
-               # MANAGER* end. This is needed because we can't reliably
-               # detect if windows have decorations or not.
-               #
-               # For example, if you have decorations disabled in Openbox,
-               # then set this to "False" to prevent PyTyle from adding
-               # decorations to your windows.
-               'original_decor': True,
-               }
+    # This setting should reflect whether or not you have
+    # decorations enabled or disabled from the *WINDOW
+    # MANAGER* end. This is needed because we can't reliably
+    # detect if windows have decorations or not.
+    #
+    # For example, if you have decorations disabled in Openbox,
+    # then set this to 'False' to prevent PyTyle from adding
+    # decorations to your windows.
+    'original_decor': True,
+    }
 
 
 #------------------------------------------------------------------------------
@@ -73,122 +70,113 @@ Config.MISC = {
 #
 # Any letter or number. There are also names for special keys.
 #
-# For a complete listing, see the PyTyle wiki:
-# http://pytyle.com/wiki/Key_listing
-#
 # Note: I haven't been able to get the F([1-9]|(1[0-2]) keys
 # to work yet. (Although, I've only tried in OpenBox.)
-#
-# Note 2: If you've used XMonad, you'll feel right as rain!
-# I started on Arch with XMonad, and moved to OpenBox,
-# so naturally, the key bindings clone XMonad's.
-#
+
 Config.KEYMAP = {
-                 # This will enable and tile the current *screen*.
-                 # It will also re-tile when pressed. You can
-                 # only access the rest of the key bindings if
-                 # you've enabled tiling on the current screen.
-                 # (Although I'm thinking of changing this for
-                 # screen[0-2]_focus.)
-                 'Alt-A': 'tile.default',
+    # This will enable and tile the current *screen*.
+    # It will also re-tile when pressed. You can
+    # only access the rest of the key bindings if
+    # you've enabled tiling on the current screen.
+    'Alt-A': 'tile.default',
 
-                 # Examples of how you can bind specific tiling
-                 # layouts to certain keys.
-                 #'Alt-Ctrl-H': 'tile.Horizontal',
-                 #'Alt-Ctrl-M': 'tile.Maximal',
-                 #'Alt-Ctrl-C': 'tile.Cascade',
+    # Examples of how you can bind specific tiling
+    # layouts to certain keys.
+    #'Alt-Ctrl-H': 'tile.Horizontal',
+    #'Alt-Ctrl-M': 'tile.Maximal',
+    #'Alt-Ctrl-C': 'tile.Cascade',
 
-                 # This will disable and untile the current
-                 # *screen*. PyTyle tries to remember the original
-                 # positions and sizes of all tiled windows,
-                 # although it isn't quite perfect yet. (Specifically,
-                 # if you have more than one screen.)
-                 'Alt-U': 'untile',
+    # This will disable and untile the current
+    # *screen*. PyTyle tries to remember the original
+    # positions and sizes of all tiled windows,
+    # although it isn't quite perfect yet. (Specifically,
+    # if you have more than one screen.)
+    'Alt-U': 'untile',
 
-                 # This will cycle through all available tiling
-                 # algorithms. By default, there are currently only
-                 # two: Vertical and Horizontal. (If you know Python,
-                 # I have made it stupidly easy to add tiling
-                 # algorithms. Check out the core Tile.py, and then
-                 # Tilers/TileDefault.py which provides common methods
-                 # to both Tilers/Horizontal.py and Tilers/Vertical.py.)
-                 'Alt-Z': 'cycle_tiler',
+    # This will cycle through all available tiling
+    # algorithms. By default, there are currently only
+    # two: Vertical and Horizontal. (If you know Python,
+    # I have made it stupidly easy to add tiling
+    # algorithms. Check out the core Tile.py, and then
+    # Tilers/TileDefault.py which provides common methods
+    # to both Tilers/Horizontal.py and Tilers/Vertical.py.)
+    'Alt-Z': 'cycle_tiler',
 
-                 # Reloads the configuration file. Make changes to your
-                 # config file, and have them applied immediately by
-                 # calling this without having to restart PyTyle.
-                 'Alt-Q': 'reload',
+    # Reloads the configuration file. Make changes to your
+    # config file, and have them applied immediately by
+    # calling this without having to restart PyTyle.
+    'Alt-Q': 'reload',
 
-                 # This is a hard reset of the current screen. It will
-                 # force a re-tile and refresh PyTyle's image of the
-                 # current screen. It will keep the same tiling
-                 # algorithm, however.
-                 'Alt-Shift-space': 'reset',
+    # This is a hard reset of the current screen. It will
+    # force a re-tile and refresh PyTyle's image of the
+    # current screen. It will keep the same tiling
+    # algorithm, however.
+    'Alt-Shift-space': 'reset',
 
-                 # This will cycle all slave windows through the
-                 # master area. (If there is more than one master
-                 # window, it will use the first master window.)
-                 'Alt-C': 'cycle',
+    # This will cycle all slave windows through the
+    # master area. (If there is more than one master
+    # window, it will use the first master window.)
+    'Alt-C': 'cycle',
 
-                 # The following three will simply put *focus* on to
-                 # the last active window of the specified screen.
-                 # Remember, these currently only work properly if
-                 # tiling is enabled on the screen.
-                 'Alt-W': 'screen0_focus',
-                 'Alt-E': 'screen1_focus',
-                 'Alt-R': 'screen2_focus',
+    # The following three will simply put *focus* on to
+    # the last active window of the specified screen.
+    # Remember, these currently only work properly if
+    # tiling is enabled on the screen.
+    'Alt-W': 'screen0_focus',
+    'Alt-E': 'screen1_focus',
+    'Alt-R': 'screen2_focus',
 
-                 # The following three will move the currently focused
-                 # window to the specified screen.
-                 'Alt-Shift-W': 'screen0_put',
-                 'Alt-Shift-E': 'screen1_put',
-                 'Alt-Shift-R': 'screen2_put',
+    # The following three will move the currently focused
+    # window to the specified screen.
+    'Alt-Shift-W': 'screen0_put',
+    'Alt-Shift-E': 'screen1_put',
+    'Alt-Shift-R': 'screen2_put',
 
-                 # The following two will increase and decrease the master
-                 # area. Depending on the tiling algorithm, these could
-                 # be irrelevant or do different things. (For instance,
-                 # in the Vertical layout, it will change the master area
-                 # width, and in the Horizontal layout, it will change the
-                 # master area height.)
-                 'Alt-H': 'master_decrease',
-                 'Alt-L': 'master_increase',
+    # The following two will increase and decrease the master
+    # area. Depending on the tiling algorithm, these could
+    # be irrelevant or do different things. (For instance,
+    # in the Vertical layout, it will change the master area
+    # width, and in the Horizontal layout, it will change the
+    # master area height.)
+    'Alt-H': 'master_decrease',
+    'Alt-L': 'master_increase',
 
-                 # The following two will increase and decrease the number
-                 # of master windows. This will allow you to easily configure
-                 # a grid layout dynamically, among other things.
-                 'Alt-period': 'add_master',
-                 'Alt-comma': 'remove_master',
+    # The following two will increase and decrease the number
+    # of master windows. This will allow you to easily configure
+    # a grid layout dynamically, among other things.
+    'Alt-period': 'add_master',
+    'Alt-comma': 'remove_master',
 
-                 # This will make the currently active window the master.
-                 'Alt-Return': 'make_active_master',
+    # This will make the currently active window the master.
+    'Alt-Return': 'make_active_master',
 
-                 # This will move focus to the master window (or the first
-                 # master window if there are more than one).
-                 'Alt-M': 'win_master',
+    # This will move focus to the master window (or the first
+    # master window if there are more than one).
+    'Alt-M': 'win_master',
 
-                 # This will close the currently focused window. You do
-                 # *NOT* need to use this to close windows. It is only
-                 # included here for completeness. (In other words, you
-                 # can close a window any way you like, minimize to
-                 # tray, etc.)
-                 'Alt-Shift-C': 'win_close',
+    # This will close the currently focused window. You do
+    # *NOT* need to use this to close windows. It is only
+    # included here for completeness. (In other words, you
+    # can close a window any way you like, minimize to
+    # tray, etc.)
+    'Alt-Shift-C': 'win_close',
 
-                 # The following two will cycle focus to the previous or
-                 # next windows. (The algorithm for this is determined
-                 # by the current tiling layout.)
-                 'Alt-J': 'win_previous',
-                 'Alt-K': 'win_next',
+    # The following two will cycle focus to the previous or
+    # next windows. (The algorithm for this is determined
+    # by the current tiling layout.)
+    'Alt-J': 'win_previous',
+    'Alt-K': 'win_next',
 
-                 # The following two will switch the current window with
-                 # the previous or next window.
-                 'Alt-Shift-J': 'switch_previous',
-                 'Alt-Shift-K': 'switch_next',
+    # The following two will switch the current window with
+    # the previous or next window.
+    'Alt-Shift-J': 'switch_previous',
+    'Alt-Shift-K': 'switch_next',
 
-                 # This is a debugging binding that shows some information
-                 # about the current desktop. It's only useful if you're
-                 # running PyTyle from a terminal.
-                 #'Alt-D': 'query',
-                 }
+    # This is a debugging binding that shows some information
+    # about the current desktop. It's only useful if you're
+    # running PyTyle from a terminal.
+    #'Alt-D': 'query',
+}
 
 #------------------------------------------------------------------------------
 # COMMAND LINE CALLBACKS
@@ -235,19 +223,19 @@ Config.WORKAREA = {}
 # options: top, bottom, left, and right. Each value should be the number
 # of pixels from the edge of the screen that PyTyle should ignore.
 #Config.WORKAREA = {
-#                   0: {
-#                       'top': 100,
-#                       'bottom': 100,
-#                       'left': 100,
-#                       'right': 100,
-#                       },
-#                   1: {
-#                       'top': 200,
-#                       'bottom': 200,
-#                       'left': 200,
-#                       'right': 200,
-#                       },
-#                   }
+#    0: {
+#        'top': 100,
+#        'bottom': 100,
+#        'left': 100,
+#        'right': 100,
+#    },
+#    1: {
+#        'top': 200,
+#        'bottom': 200,
+#        'left': 200,
+#        'right': 200,
+#    },
+#}
 
 
 #------------------------------------------------------------------------------
@@ -265,8 +253,8 @@ Config.WORKAREA = {}
 #
 # Note 2: You shouldn't need to put dmenu here.
 Config.FILTER = [
-               'gmrun', 'gimp', 'download',
-               ]
+    'gmrun', 'gimp', 'download',
+]
 
 
 #------------------------------------------------------------------------------
@@ -279,102 +267,100 @@ Config.FILTER = [
 #
 # Note: Not every layout will have configuration options.
 Config.LAYOUT = {
-                 'Vertical': {
-                              # The default width factor. This is used when
-                              # the screen is initially tiled (or reset).
-                              # Possible values: 0 < x <= 1.0
-                              'width_factor': 0.5,
+    'Vertical': {
+        # The default width factor. This is used when
+        # the screen is initially tiled (or reset).
+        # Possible values: 0 < x <= 1.0
+        'width_factor': 0.5,
 
-                              # Allows you to set a margin around *each*
-                              # window (in pixels, must be greater than 0).
-                              'margin': 0,
-                              },
+        # Allows you to set a margin around *each*
+        # window (in pixels, must be greater than 0).
+        'margin': 0,
+    },
 
-                 'Horizontal': {
-                                # The default height factor. This is used
-                                # when the screen is initialled tiled (or
-                                # reset). Possible values:
-                                # 0 < y <= 1.0
-                                'height_factor': 0.5,
+    'Horizontal': {
+        # The default height factor. This is used
+        # when the screen is initialled tiled (or
+        # reset). Possible values:
+        # 0 < y <= 1.0
+        'height_factor': 0.5,
 
-                                # Allows you to set a margin around *each*
-                                # window (in pixels, must be greater than 0).
-                                'margin': 0,
-                                },
+        # Allows you to set a margin around *each*
+        # window (in pixels, must be greater than 0).
+        'margin': 0,
+    },
 
-                 'Maximal': {
-                             # Nothing here yet... Are there any options for
-                             # Maximal? (True full screen? i.e., overlap panels
-                             # and docks?)
-                             },
+    'Maximal': {
+        # There are no settings for this algorithm
+    },
 
-                 'Cascade': {
-                             # This will be determined automatically,
-                             # but in case the windows aren't
-                             # "cascading", you might need to set this
-                             # differently.
-                             'decoration_height': 25,
+    'Cascade': {
+        # This will be determined automatically,
+        # but in case the windows aren't
+        # 'cascading', you might need to set this
+        # differently.
+        'decoration_height': 25,
 
-                             # Determines the width of the windows relative
-                             # to the screen width. Possible
-                             # values: 0 < x <= 1.0
-                             'width_factor': 1.0,
+        # Determines the width of the windows relative
+        # to the screen width. Possible
+        # values: 0 < x <= 1.0
+        'width_factor': 1.0,
 
-                             # Determines the height of the windows relative
-                             # to the screen height. Possible
-                             # values: 0 < y <= 1.0
-                             'height_factor': 1.0,
+        # Determines the height of the windows relative
+        # to the screen height. Possible
+        # values: 0 < y <= 1.0
+        'height_factor': 1.0,
 
-                             # The number of pixels to "push" each subsequent
-                             # window over. (Automatically adjusts itself
-                             # for horizontal alignment.)
-                             'push_over': 0,
+        # The number of pixels to 'push' each subsequent
+        # window over. (Automatically adjusts itself
+        # for horizontal alignment.)
+        'push_over': 0,
 
-                             # Determines the horizontal alignment of the
-                             # cascading windows. Possible
-                             # values are "left" or "right".
-                             'horz_align': 'left',
-                             },
+        # Determines the horizontal alignment of the
+        # cascading windows. Possible
+        # values are 'left' or 'right'.
+        'horz_align': 'left',
+    },
 
-                  # Default settings for the "HorizontalRows" layout.
-                  'HorizontalRows': {
-                                     # The default height factor. This is used
-                                     # when the screen is initialled tiled (or
-                                     # reset). Possible values:
-                                     # 0 < y <= 1.0
-                                     'height_factor': 0.5,
+    # Default settings for the 'HorizontalRows' layout.
+    'HorizontalRows': {
+        # The default height factor. This is used
+        # when the screen is initialled tiled (or
+        # reset). Possible values:
+        # 0 < y <= 1.0
+        'height_factor': 0.5,
 
-                                     # Simply sets how many windows to have
-                                     # in each row.
-                                     'row_size': 2,
+        # Simply sets how many windows to have
+        # in each row.
+        'row_size': 2,
 
-                                     # Allows you to set a margin around *each*
-                                     # window (in pixels, must be greater than 0).
-                                     'margin': 0,
-                                     },
+        # Allows you to set a margin around *each*
+        # window (in pixels, must be greater than 0).
+        'margin': 0,
+    },
 
-                  # An example of a perhaps more "traditional" cascading
-                  # layout that uses smaller windows.
-                  #
-                  # Note: If you need to have multiple cascading layouts
-                  # simultaneously, you'll need to create your own layout.
-                  # Quickly:
-                  #    1. Create your tiling class, say Tilers/MyCascade.py.
-                  #    2. Copy the contents of Tilers/Cascade.py into your
-                  #       new file.
-                  #    3. Change *all* instances of "Cascade" to "MyCascade"
-                  #       or whatever you named your layout.
-                  #    4. Add your new tiler to the list above.
-                  #    5. Add a new section here of configuration options
-                  #       for your new cascading layout.
-#                 'Cascade': {
-#                             'decoration_height': 25,
-#                             'width_factor': 0.5,
-#                             'height_factor': 0.5,
-#                             'push_over': 25,
-#                             'horz_align': 'left',
-#                             }
-                 }
+       # An example of a perhaps more 'traditional' cascading
+       # layout that uses smaller windows.
+       #
+       # Note: If you need to have multiple cascading layouts
+       # simultaneously, you'll need to create your own layout.
+       # Quickly:
+       #    1. Create your tiling class, say Tilers/MyCascade.py.
+       #    2. Copy the contents of Tilers/Cascade.py into your
+       #       new file.
+       #    3. Change *all* instances of 'Cascade' to 'MyCascade'
+       #       or whatever you named your layout.
+       #    4. Add your new tiler to the list above.
+       #    5. Add a new section here of configuration options
+     #      for your new cascading layout.
+#    'Cascade': {
+#       'decoration_height': 25,
+#       'width_factor': 0.5,
+#       'height_factor': 0.5,
+#       'push_over': 25,
+#       'horz_align': 'left',
+#    }
+}
 
 
 #------------------------------------------------------------------------------
@@ -384,21 +370,20 @@ Config.LAYOUT = {
 # This will let you configure the default tiling algorithms on a
 # per screen per workspace basis. A default tiler must be set.
 # Also, see the commented out configuration for an example.
-#
-# Remember: You can always cycle through the different tiling
+# You can always cycle through the different tiling
 # algorithms after the initial tile.
 Config.TILING = {
-               'default': 'Vertical',
-               }
+    'default': 'Vertical',
+}
 
-# This configuration sets the default tiler to "Vertical", and the
-# default tiler of Screen 1 to "Horizontal" (so all desktops on
+# This configuration sets the default tiler to 'Vertical', and the
+# default tiler of Screen 1 to 'Horizontal' (so all desktops on
 # Screen 1 will have a horizontal layout at first). Also, this will
 # set the default layout on Screen 0 for desktops 4 and 6 to
-# "Horizontal".
+# 'Horizontal'.
 #
 # Note: Screen and desktop numbers start from 0. So desktop 4 should
-# be configured using "3" below.
+# be configured using '3' below.
 #
 # Take note of the following desktop/viewport numbering scheme:
 # One row: 0 1 2 3
@@ -407,10 +392,10 @@ Config.TILING = {
 # 3 4 5
 # 6 7 8
 #Config.TILING = {
-#                 'default': 'Vertical',
-#                 0: {
-#                       5: 'Horizontal',
-#                       7: 'Horizontal',
-#                    },
-#                 1: 'Horizontal',
-#                 }
+#    'default': 'Vertical',
+#    0: {
+#       5: 'Horizontal',
+#       7: 'Horizontal',
+#    },
+#    1: 'Horizontal'
+#}

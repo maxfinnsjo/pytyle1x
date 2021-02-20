@@ -1,4 +1,4 @@
-"""
+'''
 Probe.py
 
 This file, along with Event.py, are the only two classes *aware*
@@ -13,7 +13,7 @@ and windows.
 This library includes everything from finding window sizes,
 desktops, maximizing/restoring windows, to physical screen information
 and a lot more.
-"""
+'''
 
 from Xlib.display import Display
 from Xlib import X, XK, Xatom, Xutil, protocol
@@ -52,7 +52,7 @@ class Probe:
     # Finds the name of the current window manager.
     #
     def determine_window_manager(self):
-        cid = self.get_root().get_full_property(self.atom("_NET_SUPPORTING_WM_CHECK"), 0)
+        cid = self.get_root().get_full_property(self.atom('_NET_SUPPORTING_WM_CHECK'), 0)
         if not cid or not hasattr(cid, 'value'):
             return
 
@@ -62,7 +62,7 @@ class Probe:
         if not win:
             return
 
-        name = win.get_full_property(self.atom("_NET_WM_NAME"), 0)
+        name = win.get_full_property(self.atom('_NET_WM_NAME'), 0)
         if not name or not hasattr(name, 'value'):
             return
 
@@ -94,7 +94,7 @@ class Probe:
                 elif mod == 'Super':
                     modmask = modmask | X.Mod4Mask
                 else:
-                    print("Could not use modifier %s" % mod, file = sys.stderr)
+                    print('Could not use modifier %s' % mod, file = sys.stderr)
         else:
             modmask = X.AnyModifier
 
@@ -109,7 +109,7 @@ class Probe:
     # Note: It's possible that we won't have an active window.
     #
     def get_active_window_id(self):
-        active = self.get_root().get_full_property(self.atom("_NET_ACTIVE_WINDOW"), 0)
+        active = self.get_root().get_full_property(self.atom('_NET_ACTIVE_WINDOW'), 0)
 
         if hasattr(active, 'value'):
             return hex(active.value[0])
@@ -120,7 +120,7 @@ class Probe:
     # Queries the window manager for the currently active desktop.
     #
     def get_desktop(self):
-        return self.get_root().get_full_property(self.atom("_NET_CURRENT_DESKTOP"), 0).value[0]
+        return self.get_root().get_full_property(self.atom('_NET_CURRENT_DESKTOP'), 0).value[0]
 
     #
     # Queries the window manager for all available desktops. It also stores each
@@ -131,10 +131,10 @@ class Probe:
     #
     def get_desktops(self):
         info = {}
-        #desktops = self.get_root().get_full_property(self.atom("_NET_DESKTOP_NAMES"), 0).value.split('\x00')[:-1]
-        desktops = self.get_root().get_full_property(self.atom("_NET_NUMBER_OF_DESKTOPS"), 0).value[0]
-        workarea = self.get_root().get_full_property(self.atom("_NET_WORKAREA"), 0).value
-        resolution = self.get_root().get_full_property(self.atom("_NET_DESKTOP_GEOMETRY"), 0).value
+        #desktops = self.get_root().get_full_property(self.atom('_NET_DESKTOP_NAMES'), 0).value.split('\x00')[:-1]
+        desktops = self.get_root().get_full_property(self.atom('_NET_NUMBER_OF_DESKTOPS'), 0).value[0]
+        workarea = self.get_root().get_full_property(self.atom('_NET_WORKAREA'), 0).value
+        resolution = self.get_root().get_full_property(self.atom('_NET_DESKTOP_GEOMETRY'), 0).value
 
         for i in range(desktops):
             info[i] = {
@@ -170,7 +170,7 @@ class Probe:
     # gives us are the x/y/width/height values of each screen. That means
     # we need to calculate which screen every window is on ourselves. You
     # can find this logic in the Screen class. Additionally, if xinerama
-    # is not available, we simply build our own "Screen 0" with the
+    # is not available, we simply build our own 'Screen 0' with the
     # desktop geometry reported from the window manager. Don't forget, if
     # there is only one screen, the tiling algorithms will use the proper
     # workarea so that it accounts for panels/docks and the like, however,
@@ -198,7 +198,7 @@ class Probe:
                 ret.append({'id': i, 'x': screen.x, 'y': screen.y, 'width': screen.width, 'height': screen.height})
 
         if not ret:
-            resolution = self.get_root().get_full_property(self.atom("_NET_DESKTOP_GEOMETRY"), 0).value
+            resolution = self.get_root().get_full_property(self.atom('_NET_DESKTOP_GEOMETRY'), 0).value
             ret = [{'id': 0, 'x': 0, 'y': 0, 'width': resolution[0], 'height': resolution[1]}]
 
         return ret
@@ -210,7 +210,7 @@ class Probe:
     # window manager like that, we need to know the current viewport.
     #
     def get_viewport(self):
-        viewport = self.get_root().get_full_property(self.atom("_NET_DESKTOP_VIEWPORT"), Xatom.CARDINAL)
+        viewport = self.get_root().get_full_property(self.atom('_NET_DESKTOP_VIEWPORT'), Xatom.CARDINAL)
         if viewport and hasattr(viewport, 'value'):
             return {'x': viewport.value[0], 'y': viewport.value[1]}
         return None
@@ -231,9 +231,9 @@ class Probe:
     #       next column.
     #
     def get_viewports(self):
-        geom = self.get_root().get_full_property(self.atom("_NET_DESKTOP_GEOMETRY"), Xatom.CARDINAL)
+        geom = self.get_root().get_full_property(self.atom('_NET_DESKTOP_GEOMETRY'), Xatom.CARDINAL)
         if self.is_compiz():
-            workarea = self.get_root().get_full_property(self.atom("_NET_WORKAREA"), Xatom.CARDINAL)
+            workarea = self.get_root().get_full_property(self.atom('_NET_WORKAREA'), Xatom.CARDINAL)
 
             if not geom or not workarea:
                 return None
@@ -263,7 +263,7 @@ class Probe:
     #
     # This will query the window manager for all necessary information for the
     # given window. This method takes a resource object created via
-    # "create_resource_object"- or alternatively, straight from an event.
+    # 'create_resource_object'- or alternatively, straight from an event.
     # (Although, I don't recommend pulling a window straight from an event, as
     # it could be out of sync with PyTyle.) This method is called when a window
     # changes- we want to know its new state. (i.e., hidden, resized, desktop
@@ -280,7 +280,7 @@ class Probe:
         # We don't really need the window name, but it's useful for debugging.
         # If a window doesn't have a name, or the window manager doesn't
         # listen to us, then we can still move on.
-        winname = win.get_full_property(self.atom("_NET_WM_NAME"), 0)
+        winname = win.get_full_property(self.atom('_NET_WM_NAME'), 0)
 
         # Another way to find the window name.
         if not winname:
@@ -293,9 +293,9 @@ class Probe:
         #
         # *However* - This could change in the future if we want to support
         # viewports instead of desktops (*ahem* compiz *ahem*). We might need
-        # to calculate the "desktop" based on the window's x,y coordinates
+        # to calculate the 'desktop' based on the window's x,y coordinates
         # in the future. (Like we do for screens.)
-        windesk = win.get_full_property(self.atom("_NET_WM_DESKTOP"), 0).value[0]
+        windesk = win.get_full_property(self.atom('_NET_WM_DESKTOP'), 0).value[0]
 
         # Fetch the window geometry- see the method below for more info.
         wingeom = self.get_window_geometry(win)
@@ -303,7 +303,7 @@ class Probe:
         # Extents are *hopefully* the window decoration sizes. PyTyle will
         # take these into account when sizing the windows. So far, support
         # seems pretty good for this from WM's.
-        extents = win.get_full_property(self.atom("_NET_FRAME_EXTENTS"), 0)
+        extents = win.get_full_property(self.atom('_NET_FRAME_EXTENTS'), 0)
 
         if not extents:
             extents = [0, 0, 0, 0]
@@ -344,15 +344,15 @@ class Probe:
         # we don't want PyTyle to *think* there is a window that's there and
         # isn't.) Check for dock/panel/skip taskbar, etc...
         #
-        # Note: We check both the "_NET_WM_STATE" (different from "WM_STATE" which
-        # tells us about iconification and stuff) and the "_NET_WM_WINDOW_TYPE".
-        state = win.get_full_property(self.atom("_NET_WM_STATE"), Xatom.ATOM)
-        dock = win.get_full_property(self.atom("_NET_WM_WINDOW_TYPE"), Xatom.ATOM)
+        # Note: We check both the '_NET_WM_STATE' (different from 'WM_STATE' which
+        # tells us about iconification and stuff) and the '_NET_WM_WINDOW_TYPE'.
+        state = win.get_full_property(self.atom('_NET_WM_STATE'), Xatom.ATOM)
+        dock = win.get_full_property(self.atom('_NET_WM_WINDOW_TYPE'), Xatom.ATOM)
         hidden = False
 
-        if state and (self.atom("_NET_WM_STATE_HIDDEN") in state.value or self.atom("_NET_WM_STATE_SKIP_TASKBAR") in state.value or self.atom("_NET_WM_STATE_SKIP_PAGER") in state.value):
+        if state and (self.atom('_NET_WM_STATE_HIDDEN') in state.value or self.atom('_NET_WM_STATE_SKIP_TASKBAR') in state.value or self.atom('_NET_WM_STATE_SKIP_PAGER') in state.value):
             hidden = True
-        if dock and (self.atom("_NET_WM_WINDOW_TYPE_DOCK") in dock.value or self.atom("_NET_WM_WINDOW_TYPE_TOOLBAR") in dock.value or self.atom("_NET_WM_WINDOW_TYPE_MENU") in dock.value or self.atom("_NET_WM_WINDOW_TYPE_SPLASH") in dock.value or self.atom("_NET_WM_WINDOW_TYPE_DIALOG") in dock.value):
+        if dock and (self.atom('_NET_WM_WINDOW_TYPE_DOCK') in dock.value or self.atom('_NET_WM_WINDOW_TYPE_TOOLBAR') in dock.value or self.atom('_NET_WM_WINDOW_TYPE_MENU') in dock.value or self.atom('_NET_WM_WINDOW_TYPE_SPLASH') in dock.value or self.atom('_NET_WM_WINDOW_TYPE_DIALOG') in dock.value):
             hidden = True
 
         # Construct the window data structure. This is passed to the
@@ -389,14 +389,14 @@ class Probe:
     # Creates a window resource object from a given window id (decimal).
     #
     def get_window_by_id(self, window_id):
-        win = self.get_display().create_resource_object("window", window_id)
+        win = self.get_display().create_resource_object('window', window_id)
         return self.get_window(win)
 
     #
     # It took me a little bit to figure this one out. So apparently, the
     # get_geometry window method returns coordinates that we don't care about.
     # (That is, they are relative to the root window?) So in order to
-    # rectify this, we need to "translate" the x,y coordinates relative to
+    # rectify this, we need to 'translate' the x,y coordinates relative to
     # that root window. Not very intuitive at all. Kudos to wmctrl for showing
     # me the light here.
     #
@@ -431,7 +431,7 @@ class Probe:
     # for information about that specific window.
     #
     def get_window_list(self):
-        return self.get_root().get_full_property(self.atom("_NET_CLIENT_LIST"), Xatom.WINDOW).value
+        return self.get_root().get_full_property(self.atom('_NET_CLIENT_LIST'), Xatom.WINDOW).value
 
     #
     # Returns the current window manager name.
@@ -490,9 +490,9 @@ class Probe:
     # although it is not currently being used.
     #
     def is_popup(self, window):
-        skip = window.get_full_property(self.atom("_NET_WM_STATE"), Xatom.ATOM)
+        skip = window.get_full_property(self.atom('_NET_WM_STATE'), Xatom.ATOM)
 
-        if skip and (self.atom("_NET_WM_STATE_MODAL") in skip.value or self.atom("_NET_WM_STATE_SKIP_TASKBAR") in skip.value or window.get_wm_transient_for()):
+        if skip and (self.atom('_NET_WM_STATE_MODAL') in skip.value or self.atom('_NET_WM_STATE_SKIP_TASKBAR') in skip.value or window.get_wm_transient_for()):
             return True
         return False
 
@@ -527,8 +527,8 @@ class Probe:
     #
     def window_add_decorations(self, win):
         # Doesn't seem to be working...
-        #win.change_property(self.atom("_MOTIF_WM_HINTS"), self.atom("_MOTIF_WM_HINTS"), 32, [0x2, 0, 1, 0, 0])
-        self._send_event(win, self.atom("_NET_WM_STATE"), [0, self.atom("_OB_WM_STATE_UNDECORATED")])
+        #win.change_property(self.atom('_MOTIF_WM_HINTS'), self.atom('_MOTIF_WM_HINTS'), 32, [0x2, 0, 1, 0, 0])
+        self._send_event(win, self.atom('_NET_WM_STATE'), [0, self.atom('_OB_WM_STATE_UNDECORATED')])
         self.get_display().flush()
 
     #
@@ -539,7 +539,7 @@ class Probe:
     #
     def window_close(self, win):
         #win.destroy()
-        self._send_event(win, self.atom("_NET_CLOSE_WINDOW"), [X.CurrentTime])
+        self._send_event(win, self.atom('_NET_CLOSE_WINDOW'), [X.CurrentTime])
         self.get_display().flush()
 
     #
@@ -564,8 +564,8 @@ class Probe:
     # root window for this. (Or any other _NET_WM_STATE_* property.)
     #
     def window_maximize(self, win):
-        self._send_event(win, self.atom("_NET_WM_STATE"), [1, self.atom("_NET_WM_STATE_MAXIMIZED_VERT"), self.atom("_NET_WM_STATE_MAXIMIZED_HORZ")])
-        #win.change_property(self.atom("_NET_WM_STATE"), Xatom.ATOM, 32, [1, self.atom("_NET_WM_STATE_MAXIMIZED_VERT"), self.atom("_NET_WM_STATE_MAXIMIZED_HORZ")])
+        self._send_event(win, self.atom('_NET_WM_STATE'), [1, self.atom('_NET_WM_STATE_MAXIMIZED_VERT'), self.atom('_NET_WM_STATE_MAXIMIZED_HORZ')])
+        #win.change_property(self.atom('_NET_WM_STATE'), Xatom.ATOM, 32, [1, self.atom('_NET_WM_STATE_MAXIMIZED_VERT'), self.atom('_NET_WM_STATE_MAXIMIZED_HORZ')])
         self.get_display().flush()
 
     #
@@ -573,8 +573,8 @@ class Probe:
     #
     def window_remove_decorations(self, win):
         # Doesn't seem to be working...
-        #win.change_property(self.atom("_MOTIF_WM_HINTS"), self.atom("_MOTIF_WM_HINTS"), 32, [0x2, 0, 0, 0, 0])
-        self._send_event(win, self.atom("_NET_WM_STATE"), [1, self.atom("_OB_WM_STATE_UNDECORATED")])
+        #win.change_property(self.atom('_MOTIF_WM_HINTS'), self.atom('_MOTIF_WM_HINTS'), 32, [0x2, 0, 0, 0, 0])
+        self._send_event(win, self.atom('_NET_WM_STATE'), [1, self.atom('_OB_WM_STATE_UNDECORATED')])
         self.get_display().flush()
 
     #
@@ -591,13 +591,13 @@ class Probe:
         self.get_display().flush()
 
     #
-    # This simply "unmaximizes" or "restores" a window. We need to do this
+    # This simply 'unmaximizes' or 'restores' a window. We need to do this
     # every time we resize a window because it could have been maximized
     # by the user (which then could not be resized).
     #
     def window_reset(self, win):
-        self._send_event(win, self.atom("_NET_WM_STATE"), [0, self.atom("_NET_WM_STATE_MAXIMIZED_VERT"), self.atom("_NET_WM_STATE_MAXIMIZED_HORZ")])
-        #win.change_property(self.atom("_NET_WM_STATE"), Xatom.ATOM, 32, [0, self.atom("_NET_WM_STATE_MAXIMIZED_VERT"), self.atom("_NET_WM_STATE_MAXIMIZED_HORZ")])
+        self._send_event(win, self.atom('_NET_WM_STATE'), [0, self.atom('_NET_WM_STATE_MAXIMIZED_VERT'), self.atom('_NET_WM_STATE_MAXIMIZED_HORZ')])
+        #win.change_property(self.atom('_NET_WM_STATE'), Xatom.ATOM, 32, [0, self.atom('_NET_WM_STATE_MAXIMIZED_VERT'), self.atom('_NET_WM_STATE_MAXIMIZED_HORZ')])
         self.get_display().flush()
 
     #

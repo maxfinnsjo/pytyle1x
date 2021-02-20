@@ -1,4 +1,4 @@
-"""
+'''
 Window.py
 
 Serves as a layer between tiling and interfacing with the Probe. It also
@@ -18,7 +18,7 @@ windows in State?)
         Each screen has its own tiling algorithm, and each tiling
         algorithm has its own tiling storage. In this storage, all tiling
         windows are kept. This will *not* include hidden windows.
-"""
+'''
 
 from PyTyle.Config import Config
 from PyTyle.State import State
@@ -76,7 +76,7 @@ class Window:
     #
     # The window constructor needs a screen to attach itself to, and a dict
     # of window attributes fetched from X. It also saves its current position so
-    # that it may be "untiled." This is also where we'll start listening to the
+    # that it may be 'untiled.' This is also where we'll start listening to the
     # window: (X.FocusChangeMask | X.StructureNotifyMask | X.PropertyChangeMask)
     #
     def __init__(self, screen, attrs):
@@ -146,7 +146,7 @@ class Window:
     #
     # Note 2: It used to check the window title. But I saw that
     # Firefox doesn't set its download window as a pop up, and so
-    # I had to use "download" to make PyTyle ignore it. That could
+    # I had to use 'download' to make PyTyle ignore it. That could
     # easily catch more windows than we want if we searched the
     # titles.
     #
@@ -236,8 +236,8 @@ class Window:
     #
     # Note: devilspie seems to try to get it to work with most other
     # window managers as well. OpenBox has a special atom for the
-    # "_NET_WM_STATE" property, namely, "_OB_WM_STATE_UNDECORATED".
-    # But other window managers seem to use "_MOTIF_WM_HINTS" to
+    # '_NET_WM_STATE' property, namely, '_OB_WM_STATE_UNDECORATED'.
+    # But other window managers seem to use '_MOTIF_WM_HINTS' to
     # add/remove decorations. However, I could not get such a thing
     # to work in Fluxbox (it's the only other window manager I tried).
     #
@@ -290,7 +290,7 @@ class Window:
     # Asks the window to restore the window. This does not use the window's
     # original x/y/width/height saved in the constructor, but instead asks
     # the window manager to do it. (It should really just be called
-    # "unmaximize".)
+    # 'unmaximize'.)
     #
     def restore(self):
         PROBE.window_reset(self.xobj)
