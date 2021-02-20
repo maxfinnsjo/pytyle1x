@@ -1,38 +1,15 @@
-'''
-Probe.py
-
-This file, along with Event.py, are the only two classes *aware*
-of X. This means the rest of PyTyle could be yanked out and used
-in other projects (YaTWM, anyone?). It also means you could rip
-out this PROBE class and use it elsewhere.
-
-Probe is a library class using Xlib to query the currently running
-window manager (and X) for information about desktops, screens,
-and windows.
-
-This library includes everything from finding window sizes,
-desktops, maximizing/restoring windows, to physical screen information
-and a lot more.
-'''
-
 from Xlib.display import Display
 from Xlib import X, XK, Xatom, Xutil, protocol
 from Xlib.ext import xinerama
 import sys, math
 
 class Probe:
-    #------------------------------------------------------------------------------
-    # CONSTRUCTOR AND INSTANCE METHODS
-    #------------------------------------------------------------------------------
-
-    #
     # There should only be one Probe instance at any given time. Upon init,
     # instantiate the display object and fetch the root window. We also need to
     # listen to certain events on the root window:
     #    1. KeyPressMask - For mapping our hot keys
     #    2. SubstructureNotifyMask - For Create/Destroy window notification
     #    3. PropertyChangeMask - For desktop change notification
-    #
     def __init__(self):
         self._display = Display()
         self._root = self.get_display().screen().root
@@ -40,17 +17,13 @@ class Probe:
         self.determine_window_manager()
         self.get_root().change_attributes(event_mask = X.KeyPressMask | X.SubstructureNotifyMask | X.PropertyChangeMask)
 
-    #
     # Alias to save some typing.
     # Display.intern_atom takes a string representation of an atom, and converts
     # it to its proper integer representation- which is what the X protocol uses.
-    #
     def atom(self, name):
         return self.get_display().intern_atom(name)
 
-    #
     # Finds the name of the current window manager.
-    #
     def determine_window_manager(self):
         cid = self.get_root().get_full_property(self.atom('_NET_SUPPORTING_WM_CHECK'), 0)
         if not cid or not hasattr(cid, 'value'):
@@ -68,19 +41,15 @@ class Probe:
 
         self._wm = name.value.lower()
 
-    #
     # Takes a string representation of a key and turns it into a key code for
     # use with grab_key. See Xlib/keysymdef/latin1.py and
     # Xlib/keysymdef/miscellany.py for available key code strings.
-    #
     def generate_keycode(self, key):
         return self.get_display().keysym_to_keycode(XK.string_to_keysym(key))
 
-    #
     # Takes a list of string modifiers and converts them to their proper mask
     # form. Essentially the equivalent of generate_keycode for key modifiers.
     # Currently the only modifiers supported are Shift, Ctrl, Alt, and Super.
-    #
     def generate_modmask(self, mods):
         modmask = 0
         if len(mods) >= 1:
@@ -100,14 +69,12 @@ class Probe:
 
         return modmask
 
-    #
     # Queries the window manager for the currently active window. This is
     # what is *always* used to find the active window. We only rely on X events
     # to tell us when to use this (since the events can come from the root
     # window, and thus give us unknown id's for any given window).
     #
     # Note: It's possible that we won't have an active window.
-    #
     def get_active_window_id(self):
         active = self.get_root().get_full_property(self.atom('_NET_ACTIVE_WINDOW'), 0)
 
@@ -116,56 +83,38 @@ class Probe:
         else:
             return None
 
-    #
     # Queries the window manager for the currently active desktop.
-    #
     def get_desktop(self):
         return self.get_root().get_full_property(self.atom('_NET_CURRENT_DESKTOP'), 0).value[0]
 
-    #
     # Queries the window manager for all available desktops. It also stores each
     # desktop name, which serves no function in PyTyle currently. (Good for easy
     # debugging though, I guess.) This is also where we query for our workarea
     # information such as the resolution, and the workarea accounting for panels
     # and/or docks. (See _NET_WM_STRUT and _NET_WM_STRUT_PARTIAL)
-    #
     def get_desktops(self):
         info = {}
-        #desktops = self.get_root().get_full_property(self.atom('_NET_DESKTOP_NAMES'), 0).value.split('\x00')[:-1]
         desktops = self.get_root().get_full_property(self.atom('_NET_NUMBER_OF_DESKTOPS'), 0).value[0]
         workarea = self.get_root().get_full_property(self.atom('_NET_WORKAREA'), 0).value
         resolution = self.get_root().get_full_property(self.atom('_NET_DESKTOP_GEOMETRY'), 0).value
 
         for i in range(desktops):
             info[i] = {
-                       'id': int(i), 'x': workarea[0], 'y': workarea[1],
-                       'width': workarea[2], 'height': workarea[3],
-                       'resx': resolution[0], 'resy': resolution[1], 'name': 'None'
-                       }
-
-#        for i in range(len(desktops)):
-#            desktop = desktops[i]
-#            info[i] = {
-#                       'id': int(i), 'x': workarea[0], 'y': workarea[1],
-#                       'width': workarea[2], 'height': workarea[3],
-#                       'resx': resolution[0], 'resy': resolution[1], 'name': desktop
-#                       }
+                'id': int(i), 'x': workarea[0], 'y': workarea[1],
+                'width': workarea[2], 'height': workarea[3],
+                'resx': resolution[0], 'resy': resolution[1], 'name': 'None'
+            }
 
         return info
 
-    #
     # Returns the current display object... Our connection to X.
-    #
     def get_display(self):
         return self._display
 
-    #
     # Returns the current root window.
-    #
     def get_root(self):
         return self._root
 
-    #
     # Tries to use xinerama to find multiple heads. The only thing xinerama
     # gives us are the x/y/width/height values of each screen. That means
     # we need to calculate which screen every window is on ourselves. You
@@ -182,12 +131,6 @@ class Probe:
     # two panels (top/bottom, for instance)- so I'm going to enable the
     # config for docks/panels to take effect regardless of the number of
     # screens.
-    #
-    # Note 2: While PyTyle is written to handle an arbitrary number of screens,
-    # I *unfortunately* don't have the capability of running triple
-    # monitors- I hope that changes soon! If you do though, I would love to
-    # hear how it's working (if at all). Email me: andrew@pytyle.com
-    #
     def get_screens(self):
         ret = []
 
@@ -203,19 +146,16 @@ class Probe:
 
         return ret
 
-    #
     # Retrieves the current viewport. This is necessary for resizing
     # windows in managers like Compiz! Compiz thinks about windows
     # *relative* to the current viewport, so whenever we resize in a
     # window manager like that, we need to know the current viewport.
-    #
     def get_viewport(self):
         viewport = self.get_root().get_full_property(self.atom('_NET_DESKTOP_VIEWPORT'), Xatom.CARDINAL)
         if viewport and hasattr(viewport, 'value'):
             return {'x': viewport.value[0], 'y': viewport.value[1]}
         return None
 
-    #
     # Retrieves all available viewports. It uses some math trickery, but here's
     # the general gist:
     #    1. Ask the WM for the desktop geometry
@@ -229,7 +169,6 @@ class Probe:
     #       viewports, respectively.
     #    5. Assigns id's: go vertical first, then wind back up to the
     #       next column.
-    #
     def get_viewports(self):
         geom = self.get_root().get_full_property(self.atom('_NET_DESKTOP_GEOMETRY'), Xatom.CARDINAL)
         if self.is_compiz():
@@ -246,21 +185,20 @@ class Probe:
             for v in range(verts):
                 for h in range(horz):
                     viewports.append({
-                                      'id': inc,
-                                      'x': (geom.value[0] / horz) * h,
-                                      'y': (geom.value[1] / verts) * v
-                                      })
+                        'id': inc,
+                        'x': (geom.value[0] / horz) * h,
+                        'y': (geom.value[1] / verts) * v
+                    })
                     inc += 1
         else:
             viewports = [{
-                          'id': 0,
-                          'x': 0,
-                          'y': 0
-                          }]
+                'id': 0,
+                'x': 0,
+                'y': 0
+            }]
 
         return viewports
 
-    #
     # This will query the window manager for all necessary information for the
     # given window. This method takes a resource object created via
     # 'create_resource_object'- or alternatively, straight from an event.
@@ -275,7 +213,6 @@ class Probe:
     # Note 2: We don't calculate which screen the window is on from here. We do
     # that later (Window.load_window, essentially). However, this method supplies
     # what we need for that calculation- the window's x,y coordinates.
-    #
     def get_window(self, win):
         # We don't really need the window name, but it's useful for debugging.
         # If a window doesn't have a name, or the window manager doesn't
@@ -358,24 +295,22 @@ class Probe:
         # Construct the window data structure. This is passed to the
         # update_attributes method.
         return {
-                 'id': hex(win.id),
-                 'desktop': int(windesk),
-                 'x': wingeom['x'], 'y': wingeom['y'],
-                 'width': wingeom['width'], 'height': wingeom['height'],
-                 'd_left': extents[0], 'd_right': extents[1],
-                 'd_top': extents[2], 'd_bottom': extents[3],
-                 'title': winname, 'class': win.get_wm_class(),
-                 'static': static,
-                 'popup': popup,
-                 'hidden': hidden,
-                 'xobj': win
-                 }
+            'id': hex(win.id),
+            'desktop': int(windesk),
+            'x': wingeom['x'], 'y': wingeom['y'],
+            'width': wingeom['width'], 'height': wingeom['height'],
+            'd_left': extents[0], 'd_right': extents[1],
+            'd_top': extents[2], 'd_bottom': extents[3],
+            'title': winname, 'class': win.get_wm_class(),
+            'static': static,
+            'popup': popup,
+            'hidden': hidden,
+            'xobj': win
+        }
 
-    #
     # Simply fetchs a list of windows from the window manager. The list is
     # given to us as window id's- we then use that id to create a resource
     # object from which we can query.
-    #
     def get_windows(self):
         info = {}
         windows = self.get_window_list()
@@ -385,14 +320,11 @@ class Probe:
 
         return info
 
-    #
     # Creates a window resource object from a given window id (decimal).
-    #
     def get_window_by_id(self, window_id):
         win = self.get_display().create_resource_object('window', window_id)
         return self.get_window(win)
 
-    #
     # It took me a little bit to figure this one out. So apparently, the
     # get_geometry window method returns coordinates that we don't care about.
     # (That is, they are relative to the root window?) So in order to
@@ -406,7 +338,6 @@ class Probe:
     # some pretty big figures. (Viewports..?) I haven't investigated Compiz
     # thoroughly, but was able to get some minimal functionality by simply
     # removing the call to translate_coords.
-    #
     def get_window_geometry(self, win):
         wingeom = win.get_geometry()
 
@@ -425,21 +356,16 @@ class Probe:
 
         return {'x': wintrans.x, 'y': wintrans.y, 'width': wingeom.width, 'height': wingeom.height}
 
-    #
     # Queries the window manager for a list of window id's. These window id's
     # are then used to create a window resource object from which we can query
     # for information about that specific window.
-    #
     def get_window_list(self):
         return self.get_root().get_full_property(self.atom('_NET_CLIENT_LIST'), Xatom.WINDOW).value
 
-    #
     # Returns the current window manager name.
-    #
     def get_wm_name(self):
         return self._wm
 
-    #
     # Another one that took forever to figure out. Grabbing a key *itself* is
     # pretty straight-forward. Unfortunately, I had number lock on. Ug. So
     # for each key we want to grab, we need to grab it normally, and then we
@@ -449,32 +375,25 @@ class Probe:
     #    Mod2Mask | LockMask (Number lock and Caps lock)
     #
     # What about scroll lock? o_O
-    #
     def grab_key(self, keycode, mask):
         self.get_root().grab_key(keycode, mask, 1, X.GrabModeAsync, X.GrabModeAsync)
         self.get_root().grab_key(keycode, mask | X.Mod2Mask, 1, X.GrabModeAsync, X.GrabModeAsync)
         self.get_root().grab_key(keycode, mask | X.LockMask, 1, X.GrabModeAsync, X.GrabModeAsync)
         self.get_root().grab_key(keycode, mask | X.Mod2Mask | X.LockMask, 1, X.GrabModeAsync, X.GrabModeAsync)
 
-    #
     # Simply checks if the xinerama extension is enabled.
-    #
     def has_xinerama(self):
         if self.get_display().has_extension('XINERAMA'):
             return True
         return False
 
-    #
     # Checks to see if Compiz is running. It needs unique attention.
-    #
     def is_compiz(self):
         if self.get_wm_name() == 'compiz':
             return True
         return False
 
-    #
     # Reports if the window manager is running or not
-    #
     def is_wm_running(self):
         try:
             PROBE.get_desktops()
@@ -482,13 +401,11 @@ class Probe:
             return False
         return True
 
-    #
     # I was using this method originally in the main event loop, but found it
     # to be unnecessary after I polished up the get_window method and queried
     # for information about a window being a transient, along with whether or
     # not it was hidden. However, this method could still be potentially useful,
     # although it is not currently being used.
-    #
     def is_popup(self, window):
         skip = window.get_full_property(self.atom('_NET_WM_STATE'), Xatom.ATOM)
 
@@ -496,53 +413,31 @@ class Probe:
             return True
         return False
 
-    #
     # Ungrabs a key (and all its modifiers). This allows us to dynamically reload
     # keybindings as PyTyle is running.
-    #
     def ungrab_key(self, keycode, mask):
         self.get_root().ungrab_key(keycode, mask)
         self.get_root().ungrab_key(keycode, mask | X.Mod2Mask)
         self.get_root().ungrab_key(keycode, mask | X.LockMask)
         self.get_root().ungrab_key(keycode, mask | X.Mod2Mask | X.LockMask)
 
-    #
     # Activates the given window. This will also pull it above all other
     # windows. Remember to flush.
-    #
     def window_activate(self, win):
         win.set_input_focus(X.RevertToNone, X.CurrentTime)
         self.window_stackabove(win)
         self.get_display().flush()
 
-    #
-    # Attemps to remove window decorations, although I don't currently
-    # recommend enabling the option to remove decorations. Why? Well,
-    # because it will be quite difficult to tell which window is active,
-    # since PyTyle isn't going to be drawing borders or anything.
-    # (Well I suppose it could? I haven't investigated this yet, but
-    # i'm not optimistic.)
-    #
     # Props to devilspie for this one.
-    #
     def window_add_decorations(self, win):
-        # Doesn't seem to be working...
-        #win.change_property(self.atom('_MOTIF_WM_HINTS'), self.atom('_MOTIF_WM_HINTS'), 32, [0x2, 0, 1, 0, 0])
         self._send_event(win, self.atom('_NET_WM_STATE'), [0, self.atom('_OB_WM_STATE_UNDECORATED')])
         self.get_display().flush()
 
-    #
-    # Simply closes the given window. This *functionality* isn't really
-    # necessary for PyTyle, as it will detect when a window closes on
-    # its own. I've included it for completeness (or if you don't have
-    # a key binding to close a window).
-    #
+    # Closes the given window
     def window_close(self, win):
-        #win.destroy()
         self._send_event(win, self.atom('_NET_CLOSE_WINDOW'), [X.CurrentTime])
         self.get_display().flush()
 
-    #
     # This sets up the event mask on the given window. This will tell the
     # X server to send us only the events we're interested in (however,
     # we still get a boat load more than what we really care about).
@@ -555,55 +450,39 @@ class Probe:
     #    PropertyChangeMask     For when a window changes desktops.
     #
     # Note: See Event.py for more information on events.
-    #
     def window_listen(self, win):
         win.change_attributes(event_mask = (X.FocusChangeMask | X.StructureNotifyMask | X.PropertyChangeMask))
 
-    #
     # Simply maximizes a window. We must send a client message event to the
     # root window for this. (Or any other _NET_WM_STATE_* property.)
-    #
     def window_maximize(self, win):
         self._send_event(win, self.atom('_NET_WM_STATE'), [1, self.atom('_NET_WM_STATE_MAXIMIZED_VERT'), self.atom('_NET_WM_STATE_MAXIMIZED_HORZ')])
-        #win.change_property(self.atom('_NET_WM_STATE'), Xatom.ATOM, 32, [1, self.atom('_NET_WM_STATE_MAXIMIZED_VERT'), self.atom('_NET_WM_STATE_MAXIMIZED_HORZ')])
         self.get_display().flush()
 
-    #
-    # See window_add_decorations.
-    #
     def window_remove_decorations(self, win):
-        # Doesn't seem to be working...
-        #win.change_property(self.atom('_MOTIF_WM_HINTS'), self.atom('_MOTIF_WM_HINTS'), 32, [0x2, 0, 0, 0, 0])
         self._send_event(win, self.atom('_NET_WM_STATE'), [1, self.atom('_OB_WM_STATE_UNDECORATED')])
         self.get_display().flush()
 
-    #
     # Attempts to set window gravity to NorthWest. So far this has been
     # working well, although changing a window's gravity is a hack. See
     # get_window for more information on this gravity stuff as it
     # relates to PyTyle.
-    #
     def window_remove_static(self, window):
         window.set_wm_normal_hints(
-                                   flags = Xutil.PWinGravity,
-                                   win_gravity = X.NorthWestGravity
-                                   )
+            flags = Xutil.PWinGravity,
+            win_gravity = X.NorthWestGravity
+        )
         self.get_display().flush()
 
-    #
     # This simply 'unmaximizes' or 'restores' a window. We need to do this
     # every time we resize a window because it could have been maximized
     # by the user (which then could not be resized).
-    #
     def window_reset(self, win):
         self._send_event(win, self.atom('_NET_WM_STATE'), [0, self.atom('_NET_WM_STATE_MAXIMIZED_VERT'), self.atom('_NET_WM_STATE_MAXIMIZED_HORZ')])
-        #win.change_property(self.atom('_NET_WM_STATE'), Xatom.ATOM, 32, [0, self.atom('_NET_WM_STATE_MAXIMIZED_VERT'), self.atom('_NET_WM_STATE_MAXIMIZED_HORZ')])
         self.get_display().flush()
 
-    #
     # Resizes the window with the given x/y/width/height pixel values.
     # Don't forget to flush after and reset the window before.
-    #
     def window_resize(self, win, x, y, width, height):
         self.window_reset(win)
 
@@ -618,44 +497,31 @@ class Probe:
         win.configure(x=x, y=y, width=width, height=height)
         self.get_display().flush()
 
-    #
     # Puts window at the top of the stack.
-    #
     def window_stackabove(self, win):
         win.configure(stack_mode=X.Above)
 
-    #
     # Puts window at the bottom of the stack.
-    #
     def window_stackbelow(self, win):
         win.configure(stack_mode=X.Below)
 
-    #
     # Stop listening to a window. PyTyle does not currently use this,
     # but I was toying with it when I was hitting positive feedback
     # in my main event loop. Yuck.
-    #
     def window_unlisten(self, win):
         win.change_attributes(event_mask = 0)
 
 
-    #------------------------------------------------------------------------------
-    # PRIVATE INSTANCE HELPER METHODS
-    #------------------------------------------------------------------------------
-
-    #
     # Another tricky one to figure out- this will allow you to send
     # a client message to the root window (necessary for removing
     # decorations, maximizing, etc).
     #
     # Props to PyPanel for this little snippet.
-    #
     def _send_event(self, win, ctype, data, mask=None):
         data = (data + ([0] * (5 - len(data))))[:5]
         ev = protocol.event.ClientMessage(window=win, client_type=ctype, data=(32, (data)))
         self.get_root().send_event(ev, event_mask=X.SubstructureRedirectMask)
 
-#
+
 # Instantiate the PROBE instance. This is what we import.
-#
 PROBE = Probe()

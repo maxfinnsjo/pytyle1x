@@ -1,12 +1,3 @@
-'''
-Screen.py
-
-The Screen class will handle all screen related functionality. For instance,
-it provides methods to detect if a given window is on its screen. Also, it
-will keep track of its state; like if it needs to be tiled, has tiling
-enabled/disable, and of course, its current tiling algorithm.
-'''
-
 from PyTyle.Config import Config
 from PyTyle.State import State
 from PyTyle.Debug import DEBUG
@@ -14,17 +5,12 @@ from PyTyle.Debug import DEBUG
 from PyTyle.Window import *
 
 class Screen:
-    #------------------------------------------------------------------------------
-    # CONSTRCUTOR AND SCREEN RELATED ATTRIBUTES/METHODS
-    #------------------------------------------------------------------------------
 
-    #
     # Initialization requies a desktop and attributes fetched from X. We also make
     # sure that it starts out with:
     #    1. Tiling disabled
     #    2. Untiled state
     #    3. No tiler
-    #
     def __init__(self, viewport, attrs):
         self.update_attributes(attrs)
         self._active = None
@@ -34,7 +20,6 @@ class Screen:
         self.windows = {}
         self.viewport = viewport
 
-    #
     # Disables tiling for this screen. Essentially, this is called when the
     # untile method is called via a key press. Meaning, if you programmatically
     # call untile, it will not disable tiling. (It will however, resize the
@@ -42,16 +27,13 @@ class Screen:
     def disable_tiling(self):
         self._tiling = False
 
-    #
     # Tells the screen that PyTyle can now touch it. Currently, a screen can
     # *only* be enabled for tiling using a key binding tied to the tile method.
     # Even if the tile method is called programmatically (i.e., not instantiated
     # via a key press), it won't tile if tiling isn't enabled.
-    #
     def enable_tiling(self):
         self._tiling = True
 
-    #
     # Fetches the currently active window for *this* screen. That means that
     # the currently active window for this screen may not be *THE* active
     # window. Be careful about that.
@@ -69,7 +51,6 @@ class Screen:
     #       and it's no longer on the screen, then return nothing.
     #    4. Finally, if it's none of the above, then return the currently
     #       set active window.
-    #
     def get_active(self):
         wins = self.get_tiler().storage.get_all()
         if not self._active and not wins:
@@ -81,14 +62,11 @@ class Screen:
 
         return self._active
 
-    #
     # Fetches the current tiling algorithm. The tiling algorithm *must* be
     # a subclass of Tile. (Which does a lot of the grunt work for you.)
-    #
     def get_tiler(self):
         return self._tile
 
-    #
     # Fetches the workarea of the current screen. Essentially, this has worked
     # quite well in my experience with just one monitor. However, when we add
     # monitors, the window manager doesn't seem to report desktop dimensions
@@ -99,7 +77,6 @@ class Screen:
     # Note: This is used in the core part of the tiling algorithms to place
     # the windows. If you have some fancy setup in your workarea, this is the
     # place to tinker! (If the configuration file isn't enough power.)
-    #
     def get_workarea(self):
         # If we have one screen, look for a 'Screen 0' config
         # and use it if it exists...

@@ -120,14 +120,6 @@ try:
             except:
                 DEBUG.write('Could not properly handle workarea change')
                 DEBUG.write(traceback.format_exc())
-
-        elif e.is_client_message():
-            callback = Config.callbacks(e.get_client_payload())
-            if callback:
-                Tile.dispatch(State.get_desktop()._VIEWPORT._SCREEN.get_tiler(), callback)
-            else:
-                DEBUG.write('Got unknown client message.')
-                DEBUG.write('payload: %s.' % e.get_client_payload())
         elif e.is_screen_change():
             DEBUG.write('Wiping the current state...')
 

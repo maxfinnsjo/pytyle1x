@@ -1,20 +1,3 @@
-'''
-State.py
-
-Keeps a record of everything going on in the outside world. It keeps track
-of all windows that PyTyle knows about, along with all desktops (but not
-all screens- no need). It also keeps a record of the current desktop. Since
-each desktop keeps a record of its current screen, and each screen keeps a
-record of its current window, State provides us with easy access to the active
-window while also giving us its desktop and screen.
-
-Additionally, State keeps track of which screens need tiling. This serves as
-a queue, and periodically, after certain things have happened (eg., a window
-was hidden), a screen will be queued up.
-
-State also serves to initialize hot keys and scans for new windows.
-'''
-
 from PyTyle.Config import Config
 from PyTyle.Probe import PROBE
 
