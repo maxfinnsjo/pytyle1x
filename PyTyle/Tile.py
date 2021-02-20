@@ -1,22 +1,3 @@
-#===============================================================================
-# PyTyle - A manual tiling manager
-# Copyright (C) 2009  Andrew Gallant <andrew@pytyle.com>
-#
-# This program is free software; you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation; either version 2 of the License, or
-# (at your option) any later version.
-#
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with this program; if not, write to the Free Software
-# Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
-#===============================================================================
-
 """
 Tile.py
 
@@ -74,14 +55,17 @@ class Tile:
     def dispatch(tiler, action=None, keycode=None, masks=None):
         if not action and keycode and masks:
             if keycode not in State.get_dispatcher():
-                print >> sys.stderr, "Keycode %s is not bound" % keycode
+                print("Keycode %s is not bound" % keycode, file = sys.stderr)
                 return
 
             # Now we need to determine which masks were used...
             if masks in State.get_dispatcher()[keycode]:
                 action = State.get_dispatcher()[keycode][masks]
             else:
-                print >> sys.stderr, "Keycode %s and keymask %d are not bound" % (keycode, masks)
+                print(
+                    "Keycode %s and keymask %d not bound" % (keycode, masks),
+                    file = sys.stderr
+                )
                 return
 
             if not tiler.screen.is_tiling() and action.find('tile.') == -1:
@@ -396,9 +380,7 @@ class Tile:
     # (Tentatively assigned the Alt-Q key binding.)
     #
     def _query(self):
-        print State.get_wm_name()
-        print self.screen.viewport.desktop
-        print self.storage
+        print(State.get_wm_name(), self.screen.viewport.desktop, self.storage)
 
 
     #------------------------------------------------------------------------------
