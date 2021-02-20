@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 
-import sys
-from distutils import sysconfig
-from distutils.core import setup
+import setuptools, sys
 
 try:
     from Xlib.display import Display
@@ -12,20 +10,18 @@ except:
     print('\nPyTyle requires python-xlib')
     sys.exit(0)
 
-#setup(
-#      name = "pytyle",
-#      author = "Andrew Gallant",
-#      author_email = "andrew@pytyle.com",
-#      version = "0.7.5",
-#      license = "GPL",
-#      description = "A manual tiling manager for EWMH compliant window managers",
-#      long_description = "See README",
-#      url = "http://pytyle.com",
-#      platforms = 'POSIX',
-#      packages = ['PyTyle', 'PyTyle.Tilers'],
-#      data_files = [
-#                    (sysconfig.get_python_lib() + '/PyTyle',
-#                     ['./pytylerc', './INSTALL', './LICENSE', './README', './TODO', './CHANGELOG'])
-#                    ],
-#      scripts = ['pytyle','pytyle-client']
-#      )
+setuptools.setup(
+    name = 'pytyle1x',
+    version = '0.7.5',
+    author = 'programical',
+    description = 'A tiling manager for EWMH compliant window managers',
+    long_description = open('README.md', 'r').read(),
+    long_description_content_type = 'text/markdown',
+    url = 'https://github.com/programical/pytyle1x',
+    packages = setuptools.find_packages(),
+    classifiers = [
+        'Programming Language :: Python :: 3'
+    ],
+    scripts = ['pytyle1x'],
+    python_requires = '>=3.6',
+)

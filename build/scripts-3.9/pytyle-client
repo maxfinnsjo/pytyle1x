@@ -1,10 +1,8 @@
-#!/usr/bin/env python3
+#!/usr/bin/python3
 
 # A big thanks to Johannes Pirkl for this patch!
 
-# XXX: is this necessary?
-
-'''from Xlib import X, protocol
+from Xlib import X, protocol
 from Xlib.display import Display
 import sys
 
@@ -24,4 +22,3 @@ cm_event = protocol.event.ClientMessage(
 
 root.send_event(cm_event,event_mask=mask)
 display.flush()
-'''

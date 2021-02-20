@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/python3
 
 """
 pytyle
@@ -29,7 +29,7 @@ possibly Event.py. No other files interface with python-xlib.
 """
 
 # Some basics...
-import time, sys, os, shutil, distutils.sysconfig, traceback
+import time, sys, os, traceback, pathlib
 
 # What we need.
 from PyTyle.Config import Config
@@ -41,6 +41,19 @@ from PyTyle.Window import Window
 from PyTyle.Event import Event
 from PyTyle.Tile import Tile
 
+def reloadTilers():
+    for module in Config.misc('tilers'):
+        tmp = __import__('PyTyle.Tilers.' + module, fromlist=[''])
+        Config.TILERS[module] = tmp.CLASS
+
+def reloadConfig():
+    conPath = str(pathlib.Path.home()) + '/.pytylerc'
+    try:
+        with open(conPath, 'r') as conFile:
+            exec(conFile.read())
+    except FileNotFoundError:
+        DEBUG.write('Configuration file ~/.pytylerc does not exist')
+
 # Before moving on, we must make sure the window
 # manager is running. If not, wait for it.
 if not PROBE.is_wm_running():
@@ -51,33 +64,12 @@ if not PROBE.is_wm_running():
             break
 
 # load configuration
-# Very easy to use Python as a config file...
-# Should I change it to a more traditional config?
-try:
-    config_path = os.getenv('XDG_CONFIG_HOME')
-    if not config_path:
-        config_path = os.getenv('HOME') + '/.config'
-    config_path += '/pytyle'
-    config_file = "%s/pytylerc" % config_path
-
-    if not os.access(config_file, os.F_OK | os.R_OK):
-        if not os.path.exists(config_path):
-            os.makedirs(config_path)
-        shutil.copyfile("%s/PyTyle/pytylerc" % (distutils.sysconfig.get_python_lib()), config_file)
-
-    if os.access(config_file, os.F_OK | os.R_OK):
-        execfile(config_file)
-except:
-    DEBUG.write("Could not write configuration file to home directory and load it. Exiting!")
-    DEBUG.write(traceback.format_exc())
-    sys.exit(0)
+reloadConfig()
 
 try:
     # initialize the tilers dynamically, so all we need to do
     # is add a tiler to Tilers, and add it to the configuration
-    for module in Config.MISC['tilers']:
-        tmp = __import__('PyTyle.Tilers.' + module, fromlist=[''])
-        Config.TILERS[module] = tmp.CLASS
+    reloadTilers()
 
     # Initialize hot keys...
     # See also, grab_key in Event.py
@@ -105,24 +97,10 @@ try:
     # Stall and await orders...
     while True:
         if State.needs_reload():
-            try:
-                config_path = os.getenv('XDG_CONFIG_HOME')
-                if not config_path:
-                    config_path = os.getenv('HOME') + '/.config'
-                config_path += '/pytyle'
-                config_file = "%s/pytylerc" % config_path
-
-                if os.access(config_file, os.F_OK | os.R_OK):
-                    execfile(config_file)
-            except:
-                DEBUG.write("Could not write configuration file to home directory and load it. Exiting!")
-                DEBUG.write(traceback.format_exc())
-                sys.exit(0)
+            reloadConfig()
 
             # Reload the tiling modules
-            for module in Config.MISC['tilers']:
-                tmp = __import__('PyTyle.Tilers.' + module, fromlist=[''])
-                Config.TILERS[module] = tmp.CLASS
+            reloadTilers()
 
             # Reload our key bindings
             #
@@ -189,7 +167,7 @@ try:
             try:
                 newwins = State.scan_all_windows()
                 for win in State.get_windows().values():
-                    if long(win.id, 0) not in newwins:
+                    if int(win.id, 0) not in newwins:
                         win.delete()
             except:
                 DEBUG.write("Could not properly handle window destruction")
