@@ -11,6 +11,7 @@ setuptools.setup(
     long_description_content_type = 'text/markdown',
     url = 'https://github.com/programical/pytyle1x',
     packages = setuptools.find_packages(),
+    install_requires = ['python-xlib'],
     classifiers = [
         'Programming Language :: Python :: 3.6',
         'License :: OSI Approved :: GNU General Public License v3 (GPLv3)',
