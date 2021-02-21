@@ -2,17 +2,9 @@
 
 import setuptools, sys
 
-try:
-    from Xlib.display import Display
-    from Xlib import X, XK, Xatom, Xutil, protocol
-    from Xlib.ext import xinerama
-except:
-    print('\nPyTyle requires python-xlib')
-    sys.exit(0)
-
 setuptools.setup(
     name = 'pytyle1x',
-    version = '0.7.5',
+    version = '0.7.8',
     author = 'programical',
     description = 'A tiling manager for EWMH compliant window managers',
     long_description = open('README.md', 'r').read(),
@@ -20,8 +12,11 @@ setuptools.setup(
     url = 'https://github.com/programical/pytyle1x',
     packages = setuptools.find_packages(),
     classifiers = [
-        'Programming Language :: Python :: 3'
+        'Programming Language :: Python :: 3.6',
+        'License :: OSI Approved :: GNU General Public License v3 (GPLv3)',
+        'Operating System :: POSIX :: Linux',
+        'Topic :: Desktop Environment :: Window Managers'
     ],
-    scripts = ['pytyle1x'],
+    scripts = ['bin/pytyle1x'],
     python_requires = '>=3.6',
 )
