@@ -12,13 +12,13 @@ from PyTyle.Event import Event
 from PyTyle.Tile import Tile
 
 
-def reloadTilers():
+def reload_tilers():
     for module in Config.misc('tilers'):
         tmp = __import__('PyTyle.Tilers.' + module, fromlist = [''])
         Config.TILERS[module] = tmp.CLASS
 
 
-def reloadConfig():
+def reload_config():
     conPath = str(pathlib.Path.home()) + '/.pytylerc'
     try:
         with open(conPath, 'r') as conFile:
@@ -27,19 +27,16 @@ def reloadConfig():
         DEBUG.write('Configuration file ~/.pytylerc does not exist')
 
 
-if not PROBE.is_wm_running():
-    while True:
-        time.sleep(1)
-        if PROBE.is_wm_running():
-            time.sleep(1)
-            break
+while not PROBE.is_wm_running():
+    time.sleep(1)
+time.sleep(1)
 
 
-reloadConfig()
+reload_config()
 
 
 try:
-    reloadTilers()
+    reload_tilers()
     State.register_hotkeys()
     Desktop.load_desktops()
     Window.load_new_windows()
@@ -47,8 +44,8 @@ try:
 
     while True:
         if State.needs_reload():
-            reloadConfig()
-            reloadTilers()
+            reload_config()
+            reload_tilers()
             State.unregister_hotkeys()
             State.register_hotkeys()
             Desktop.reload_desktops()
@@ -97,20 +94,12 @@ try:
                 DEBUG.write('Could not properly handle window destruction')
                 DEBUG.write(traceback.format_exc())
                 continue
-        elif e.is_window_change():
-            try:
-                if e.get_window_id() in State.get_windows():
-                    print(e._event)
-                    State.get_windows()[e.get_window_id()].refresh()
-            except:
-                DEBUG.write('Could not properly handle window changing event (moved/resized/desktop change)')
-                DEBUG.write(traceback.format_exc())
-        elif e.is_state_change():
+        elif e.is_window_change() or e.is_state_change():
             try:
                 if e.get_window_id() in State.get_windows():
                     State.get_windows()[e.get_window_id()].refresh()
             except:
-                DEBUG.write('Could not properly handle window state event (iconified?)')
+                DEBUG.write('Could not properly handle window/state change')
                 DEBUG.write(traceback.format_exc())
         elif e.is_workarea_change():
             time.sleep(Config.misc('timeout'))
