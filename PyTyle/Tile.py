@@ -52,7 +52,7 @@ class Tile:
     # binding is the only way to enable tiling.)
     #
     @staticmethod
-    def dispatch(tiler, action=None, keycode=None, masks=None):
+    def dispatch(tiler, action = None, keycode = None, masks = None):
         if not action and keycode and masks:
             if keycode not in State.get_dispatcher():
                 print('Keycode %s is not bound' % keycode, file = sys.stderr)
@@ -135,7 +135,12 @@ class Tile:
             else:
                 window.remove_decorations()
 
-            window.resize(window.origx, window.origy, window.origwidth, window.origheight)
+            window.resize(
+                window.origx,
+                window.origy,
+                window.origwidth,
+                window.origheight
+            )
 
     #
     # Tells PyTyle to reload the configuration file.
@@ -377,7 +382,6 @@ class Tile:
 
     #
     # A simple debugging tool. Only useful if PyTyle is running from a shell.
-    # (Tentatively assigned the Alt-Q key binding.)
     #
     def _query(self):
         print(State.get_wm_name(), self.screen.viewport.desktop, self.storage)

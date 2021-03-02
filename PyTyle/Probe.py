@@ -422,7 +422,6 @@ class Probe:
         ).value
 
     # Returns the current window manager name.
-    # TODO: remove pointless getters
     def get_wm_name(self):
         return self._wm
 

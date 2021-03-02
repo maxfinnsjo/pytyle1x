@@ -68,8 +68,7 @@ class Desktop:
             obj = Viewport(self, viewport)
             self.viewports[viewport['id']] = obj
 
-    # Simply updates all the desktop attributes. Currently only used in the
-    # constructor.
+    # Simply updates all the desktop attributes.
     def update_attributes(self, attrs):
         self.id = attrs['id']
         self.resx = attrs['resx']
