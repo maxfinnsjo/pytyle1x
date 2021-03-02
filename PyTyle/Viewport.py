@@ -44,14 +44,11 @@ class Viewport:
     # equal to 0.
     #
     def is_on_viewport(self, x, y):
-        if x >= self.x and y >= self.y and x < (self.x + self.width) and y < (self.y + self.height):
-            return True
-
-        # off the screen?
-        if (x < 0 or y < 0) and self.x == 0 and self.y == 0:
-            return True
-
-        return False
+        offScreen = ((x < 0 or y < 0) and self.x == 0 and self.y == 0)
+        onViewport = (
+            x >= self.x and y >= self.y and x < (self.x + self.width) and y < (self.y + self.height)
+        )
+        return offScreen or onViewport
 
     #
     # Probes X (using xinerama) for all available screens. For every viewport,

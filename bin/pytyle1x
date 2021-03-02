@@ -123,6 +123,6 @@ try:
                 DEBUG.write('Could not properly handle screen change')
                 DEBUG.write(traceback.format_exc())
 except:
-    DEBUG.write('Fatal error')
+    DEBUG.write('Fatal error!')
     DEBUG.write(traceback.format_exc())
-    sys.exit(0)
+    sys.exit(1)

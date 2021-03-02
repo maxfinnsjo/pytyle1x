@@ -283,7 +283,7 @@ class State:
             keycode = PROBE.generate_keycode(key)
             modmask = PROBE.generate_modmask(mods)
 
-            # Tell X we want to hear about it when this key is pressed...
+            # Tell X we don't want to hear about it when this key is pressed...
             try:
                 PROBE.ungrab_key(keycode, modmask)
             except:

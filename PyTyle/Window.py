@@ -156,8 +156,9 @@ class Window:
     def filtered(self):
         if self.winclass:
             for winfilter in Config.filter():
-                if self.winclass[0].lower().find(winfilter.lower()) != -1 or self.winclass[1].lower().find(winfilter.lower()) != -1: # or window.title.lower().find(winfilter.lower()) != -1:
-                    return True
+                for i in {0, 1}:
+                    if self.winclass[i].lower().find(winfilter.lower()) != -1:
+                        return True
 
         return False
 
@@ -327,8 +328,6 @@ class Window:
     #
     def update_attributes(self, attrs):
         self.id = attrs['id']
-#        self.x = attrs['x']
-#        self.y = attrs['y']
         self.width = attrs['width']
         self.height = attrs['height']
         self.d_left = attrs['d_left']

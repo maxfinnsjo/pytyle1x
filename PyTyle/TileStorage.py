@@ -38,7 +38,8 @@ class TileStorage:
     # many masters are currently loaded in the storage.
     #
     def add(self, window):
-        if window.hidden: return
+        if window.hidden:
+            return
 
         if len(self._masters) < self.get_master_count():
             if window.id in self.get_slaves_by_id():
@@ -48,7 +49,8 @@ class TileStorage:
             self._add_slave(window)
 
     def add_top(self, window):
-        if window.hidden: return
+        if window.hidden:
+            return
 
         if len(self._masters) < self.get_master_count():
             if window.id in self.get_slaves_by_id():
@@ -58,7 +60,8 @@ class TileStorage:
             self._add_top_slave(window)
 
     def add_bottom(self, window):
-        if window.hidden: return
+        if window.hidden:
+            return
 
         if len(self._masters) < self.get_master_count():
             if window.id in self.get_slaves_by_id():
@@ -72,7 +75,8 @@ class TileStorage:
     # go below 0 for obvious reasons (but can be equal to 0).
     #
     def dec_master_count(self):
-        if self._master_count == 0: return
+        if self._master_count == 0:
+            return
         self._master_count -= 1
 
     #
@@ -195,17 +199,13 @@ class TileStorage:
     # count.
     #
     def _add_master(self, window):
-        self._masters.append(
-                            (window.title.lower(), window)
-                            )
+        self._masters.append((window.title.lower(), window))
 
     #
     # Explicitly adds a slave to the storage.
     #
     def _add_slave(self, window):
-        self._slaves.append(
-                           (window.title.lower(), window)
-                           )
+        self._slaves.append((window.title.lower(), window))
 
     #
     # Explicitly adds a master to the storage. Please do not
@@ -213,17 +213,13 @@ class TileStorage:
     # count.
     #
     def _add_bottom_master(self, window):
-        self._masters.append(
-                            (window.title.lower(), window)
-                            )
+        self._masters.append((window.title.lower(), window))
 
     #
     # Explicitly adds a slave to the storage.
     #
     def _add_bottom_slave(self, window):
-        self._slaves.append(
-                           (window.title.lower(), window)
-                           )
+        self._slaves.append((window.title.lower(), window))
 
     #
     # Explicitly adds a master to the storage. Please do not
@@ -231,17 +227,13 @@ class TileStorage:
     # count.
     #
     def _add_top_master(self, window):
-        self._masters.insert(0,
-                            (window.title.lower(), window)
-                            )
+        self._masters.insert(0, (window.title.lower(), window))
 
     #
     # Explicitly adds a slave to the storage.
     #
     def _add_top_slave(self, window):
-        self._slaves.insert(0,
-                           (window.title.lower(), window)
-                           )
+        self._slaves.insert(0, (window.title.lower(), window))
 
     #
     # Explicitly removes a master from the storage.
