@@ -61,7 +61,9 @@ class Config:
                 'height_factor': 0.5,
                 'margin': 0,
             },
-            'Maximal': {},
+            'Maximal': {
+                'margin': 0,
+            },
             'Cascade': {
                 'decoration_height': 25,
                 'width_factor': 1.0,

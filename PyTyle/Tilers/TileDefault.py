@@ -48,8 +48,6 @@ class TileDefault (Tile):
     # tiling actions. It's a bit hairy, so I've commented the code as we go.
     #
     def help_find_next(self):
-        # First retrieve all masters and all slaves... And also
-        # pack them together.
         masters = self.storage.get_masters()
         slaves = self.storage.get_slaves()
         all = masters + slaves
@@ -63,7 +61,6 @@ class TileDefault (Tile):
                 return masters[-1]
             else:
                 return slaves[0]
-
         # If there are slaves, then check if the active window is the
         # last slave. If it is, then focus on the last master, or if
         # there are no masters, then focus on the first slave.
@@ -72,7 +69,6 @@ class TileDefault (Tile):
                 return slaves[0]
             else:
                 return masters[-1]
-
         # Now that our edge cases are satisfied, we simply find where
         # we are, and iterate to find the next window. (Same for masters
         # and slaves.)
@@ -85,11 +81,9 @@ class TileDefault (Tile):
                 if self.screen.get_active().id == masters[i].id:
                     return masters[(i - 1)]
 
-    #
     # See help_find_next above. Also see the comments in the code,
     # as help_find_previous is basically the same thing- we're just
     # going in reverse.
-    #
     def help_find_previous(self):
         masters = self.storage.get_masters()
         slaves = self.storage.get_slaves()

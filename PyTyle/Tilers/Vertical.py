@@ -13,9 +13,11 @@ at the bottom of your class definition file (see the bottom of this file
 for an example). This is so tiling algorithms can be dynamically loaded.
 """
 
+
 from PyTyle.Tilers.TileDefault import TileDefault
 
-class Vertical (TileDefault):
+
+class Vertical(TileDefault):
     #------------------------------------------------------------------------------
     # OVERLOADED INSTANCE METHODS
     #------------------------------------------------------------------------------
@@ -34,7 +36,6 @@ class Vertical (TileDefault):
     def _tile(self):
         x, y, width, height = self.screen.get_workarea()
 
-        # set some vars...
         masters = self.storage.get_masters()
         slaves = self.storage.get_slaves()
 
@@ -106,8 +107,5 @@ class Vertical (TileDefault):
         for master in masters:
             master.resize(master.x, master.y, master.width - pixels, master.height)
 
-# You must have this line's equivalent for your tiling algorithm!
-# This makes it possible to dynamically load tiling algorithms.
-# (So that you may simply drop them into the Tilers directory,
-# and add their name to the configuration- vini, vidi, vicci!)
+
 CLASS = Vertical
