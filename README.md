@@ -1,5 +1,5 @@
 This is a fork of the [original PyTyle](http://github.com/BurntSushi/pytyle1),
-adjusted to work with Python 3.
+adjusted to work with Python 3. Development continues, and you can expect optimizations, new features and bug fixes.
 
 PyTyle is an extremely versatile and extensible tiling manager that is meant
 to be embedded into EWMH window managers. Its feature set was modeled after
