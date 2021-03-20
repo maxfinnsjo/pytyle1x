@@ -1,11 +1,7 @@
 '''
-Tile.py
-
-Tile is the guts of the tiling algorithm. It actually does *most* of the heavy
-lifting for you, as many of the tiling actions (i.e., the key bindings in the
-configuration) aren't really relevant to the physical display of the windows.
-(However, the class hierarchy is such that you could make them relevant, if you
-wish.)
+Tile does *most* of the heavy lifting for you, as many of the tiling actions
+(i.e., the key bindings in the configuration) aren't really relevant to the
+physical display of the windows.
 
 In fact, to create your own customized tiling algorithm, you need only overload
 the following methods: _tile, _cycle, _master_increase, _master_decrease,
@@ -14,9 +10,6 @@ so similar, that currently, _cycle, help_find_next, and help_find_previous are
 overloaded once in TileDefault (which cannot be used as a tiling algorithm by
 itself), and _tile, _master_increase, and _master_decrease are each overloaded
 accordingly in two of TileDefault's subclasses: Horizontal and Vertical.
-
-To create your own tiling algorithm, read the comments in this file, along with
-Tilers/TileDefault.py, Tilers/Horizontal.py, and Tilers/Vertical.py.
 '''
 
 import sys, os, time
@@ -128,7 +121,7 @@ class Tile:
     # mainly saved when a window is first created and maybe when it switches screens.
     #
     def _untile(self):
-        # just resize all the windows back to their original x/y/width/height
+        # resize all the windows back to their original x/y/width/height
         for window in self.storage.get_all():
             if Config.misc('original_decor'):
                 window.add_decorations()
