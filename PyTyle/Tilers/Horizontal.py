@@ -1,22 +1,15 @@
-"""
-Horizontal.py
-
+'''
 The opposite to the Vertical layout. I like to use this on monitors with
 1280x1024 (or 1920x1200) resolution, and Vertical on monitors with less
 height to them (1280x720 or 1280x800).
 
 Remember that this class inherits _cycle, help_find_next, and help_find_previous
 from TileDefault.
-
-Note that if you're creating your own tiling algorithm, you *MUST* add
-    CLASS = CLASS_NAME
-at the bottom of your class definition file (see the bottom of this file
-for an example). This is so tiling algorithms can be dynamically loaded.
-"""
+'''
 
 from PyTyle.Tilers.TileDefault import TileDefault
 
-class Horizontal (TileDefault):
+class Horizontal(TileDefault):
     #
     # The core tiling algorithm. Every core tiling algorithm should start with
     # grabbing the current screen's workarea and factoring that into your
@@ -47,12 +40,40 @@ class Horizontal (TileDefault):
 
         # resize the master windows
         for master in masters:
-            self.help_resize(master, masterX, masterY, masterWidth, masterHeight, self.state.get('margin'))
+            self.help_resize(
+                master,
+                masterX,
+                masterY,
+                masterWidth,
+                masterHeight,
+                self.state.get('margin'),
+                self.state.get('internal_margin'),
+                {
+                    't': False,
+                    'l': masterX != x,
+                    'r': masterX + masterWidth < x + width,
+                    'b': masterY + masterHeight < y + height
+                }
+            )
             masterX += masterWidth
 
         # now resize the rest... keep track of heights/positioning
         for slave in slaves:
-            self.help_resize(slave, slaveX, slaveY, slaveWidth, slaveHeight, self.state.get('margin'))
+            self.help_resize(
+                slave,
+                slaveX,
+                slaveY,
+                slaveWidth,
+                slaveHeight,
+                self.state.get('margin'),
+                self.state.get('internal_margin'),
+                {
+                    't': slaveY != y,
+                    'l': slaveX != x,
+                    'r': slaveX + slaveWidth < x + width,
+                    'b': False
+                }
+            )
             slaveX += slaveWidth
 
     #

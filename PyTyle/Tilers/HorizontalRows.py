@@ -1,16 +1,16 @@
-"""
+'''
 HorizontalRows.py
 
-This is something *like* the "Horizontal" layout, except instead of having
-one row of slaves "beneath" the master, it can have multiple rows. By
+This is something *like* the 'Horizontal' layout, except instead of having
+one row of slaves 'beneath' the master, it can have multiple rows. By
 default, it will be two windows per row (or, two columns). This can be
 changed in the LAYOUT portion of the configuration file.
-"""
+'''
 
 from PyTyle.Tilers.TileDefault import TileDefault
 import math
 
-class HorizontalRows (TileDefault):
+class HorizontalRows(TileDefault):
     #
     # Does almost the same thing as the Horizontal layout,
     # but is a bit more complex to account for multiple
@@ -19,46 +19,74 @@ class HorizontalRows (TileDefault):
     def _tile(self):
         x, y, width, height = self.screen.get_workarea()
 
-        # set some vars...
         masters = self.storage.get_masters()
         slaves = self.storage.get_slaves()
-        row_size = self.state.get('row_size')
-        rows = int(math.ceil(float(len(slaves)) / float(row_size)))
-        last_row_size = len(slaves) % row_size
-        if not last_row_size: last_row_size = row_size
+        rowSize = self.state.get('row_size')
+        rows = int(math.ceil(float(len(slaves)) / float(rowSize)))
+        lastRowSize = len(slaves) % rowSize
+        if not lastRowSize:
+            lastRowSize = rowSize
 
         masterWidth = width if not masters else (width / len(masters))
         masterHeight = height if not slaves else int(height * self.state.get('height_factor'))
         masterY = y
         masterX = x
 
-        slaveWidth = width if not slaves else (width / row_size)
+        slaveWidth = width if not slaves else (width / rowSize)
         slaveHeight = height if not slaves else ((height if not masters else height - masterHeight) / rows)
         slaveY = y if not masters else (y + masterHeight)
         slaveX = x
 
         # resize the master windows
         for master in masters:
-            self.help_resize(master, masterX, masterY, masterWidth, masterHeight, self.state.get('margin'))
+            self.help_resize(
+                master,
+                masterX,
+                masterY,
+                masterWidth,
+                masterHeight,
+                self.state.get('margin'),
+                self.state.get('internal_margin'),
+                {
+                    't': masterY != y,
+                    'l': masterX != x,
+                    'r': masterX + masterWidth < x + width,
+                    'b': masterY + masterHeight < y + height
+                }
+            )
             masterX += masterWidth
 
-        current_row = 1
-        current_window = 1
+        currentRow = 1
+        currentWindow = 1
         for slave in slaves:
             # last row!
-            if current_row == rows:
-                slaveWidth = width / last_row_size
+            if currentRow == rows:
+                slaveWidth = width / lastRowSize
 
-            self.help_resize(slave, slaveX, slaveY, slaveWidth, slaveHeight, self.state.get('margin'))
+            self.help_resize(
+                slave,
+                slaveX,
+                slaveY,
+                slaveWidth,
+                slaveHeight,
+                self.state.get('margin'),
+                self.state.get('internal_margin'),
+                {
+                    't': slaveY != y,
+                    'l': slaveX != x,
+                    'r': slaveWidth != width and currentWindow % rowSize != 0,
+                    'b': slaveHeight != height and currentRow != rows
+                }
+            )
             slaveX += slaveWidth
 
-            if current_window % row_size == 0:
-                current_row += 1
-                current_window = 1
+            if currentWindow % rowSize == 0:
+                currentRow += 1
+                currentWindow = 1
                 slaveX = x
                 slaveY += slaveHeight
             else:
-                current_window += 1
+                currentWindow += 1
 
     #
     # This one is actually pretty neat. First we need to take care
@@ -77,8 +105,8 @@ class HorizontalRows (TileDefault):
         x, y, width, height = self.screen.get_workarea()
         slaves = self.storage.get_slaves()
         masters = self.storage.get_masters()
-        row_size = self.state.get('row_size')
-        rows = int(math.ceil(float(len(slaves)) / float(row_size)))
+        rowSize = self.state.get('row_size')
+        rows = int(math.ceil(float(len(slaves)) / float(rowSize)))
 
         # Stop if neither of either... haha
         if not slaves or not masters:
@@ -91,20 +119,20 @@ class HorizontalRows (TileDefault):
         # Make it easy... change pixels to next closest
         # multiple of the number of rows...
         pixels = pixels - (pixels % rows)
-        slave_pixels = pixels / rows
+        slavePixels = pixels / rows
 
-        current_row = 1
-        current_window = 1
-        height_pixels = pixels
+        currentRow = 1
+        currentWindow = 1
+        heightPixels = pixels
         for slave in slaves:
-            slave.resize(slave.x, slave.y + height_pixels, slave.width, slave.height - slave_pixels)
+            slave.resize(slave.x, slave.y + heightPixels, slave.width, slave.height - slavePixels)
 
-            if current_window % row_size == 0:
-                current_row += 1
-                current_window = 1
-                height_pixels -= slave_pixels
+            if currentWindow % rowSize == 0:
+                currentRow += 1
+                currentWindow = 1
+                heightPixels -= slavePixels
             else:
-                current_window += 1
+                currentWindow += 1
         for master in masters:
             master.resize(master.x, master.y, master.width, master.height + pixels)
 
@@ -115,8 +143,8 @@ class HorizontalRows (TileDefault):
         x, y, width, height = self.screen.get_workarea()
         slaves = self.storage.get_slaves()
         masters = self.storage.get_masters()
-        row_size = self.state.get('row_size')
-        rows = int(math.ceil(float(len(slaves)) / float(row_size)))
+        rowSize = self.state.get('row_size')
+        rows = int(math.ceil(float(len(slaves)) / float(rowSize)))
 
         # Stop if neither of either... haha
         if not slaves or not masters:
@@ -129,20 +157,20 @@ class HorizontalRows (TileDefault):
         # Make it easy... change pixels to next closest
         # multiple of the number of rows...
         pixels = pixels - (pixels % rows)
-        slave_pixels = pixels / rows
+        slavePixels = pixels / rows
 
-        current_row = 1
-        current_window = 1
-        height_pixels = pixels
+        currentRow = 1
+        currentWindow = 1
+        heightPixels = pixels
         for slave in slaves:
-            slave.resize(slave.x, slave.y - height_pixels, slave.width, slave.height + slave_pixels)
+            slave.resize(slave.x, slave.y - heightPixels, slave.width, slave.height + slavePixels)
 
-            if current_window % row_size == 0:
-                current_row += 1
-                current_window = 1
-                height_pixels -= slave_pixels
+            if currentWindow % rowSize == 0:
+                currentRow += 1
+                currentWindow = 1
+                heightPixels -= slavePixels
             else:
-                current_window += 1
+                currentWindow += 1
         for master in masters:
             master.resize(master.x, master.y, master.width, master.height - pixels)
 

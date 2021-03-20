@@ -56,10 +56,12 @@ class Config:
             'Vertical': {
                 'width_factor': 0.5,
                 'margin': 0,
+                'internal_margin': 0,
             },
             'Horizontal': {
                 'height_factor': 0.5,
                 'margin': 0,
+                'internal_margin': 0,
             },
             'Maximal': {
                 'margin': 0,
@@ -75,6 +77,7 @@ class Config:
                 'row_size': 2,
                 'height_factor': 0.5,
                 'margin': 0,
+                'internal_margin': 0,
             },
         },
         'TILING': {

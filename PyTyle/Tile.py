@@ -394,12 +394,32 @@ class Tile:
     #
     # Resizes the given window. Takes into account its decorations.
     #
-    def help_resize(self, window, x, y, width, height, margin = 0):
+    def help_resize(self, window, x, y, width, height, margin = 0, intMargin = None, intBorders = {'t': False, 'l': False, 'r': False, 'b': False}):
+        if intMargin == None:
+            intMargin = margin
+
         if margin > 0:
-            x += margin
-            y += margin
-            width -= (2 * margin)
-            height -= (2 * margin)
+            x += intMargin if intBorders['l'] else margin
+            y += intMargin if intBorders['t'] else margin
+            if intBorders['l']:
+                width -= intMargin
+            else:
+                width -= margin
+
+            if intBorders['r']:
+                width -= intMargin
+            else:
+                width -= margin
+
+            if intBorders['t']:
+                height -= intMargin
+            else:
+                height -= margin
+
+            if intBorders['b']:
+                height -= intMargin
+            else:
+                height -= margin
 
         if window.static:
             window.remove_static_property()
@@ -408,7 +428,12 @@ class Tile:
             if not Config.misc('original_decor'):
                 window.add_decorations()
 
-            window.resize(int(x), int(y), int(width - window.d_left - window.d_right), int(height - window.d_top - window.d_bottom))
+            window.resize(
+                int(x),
+                int(y),
+                int(width - window.d_left - window.d_right),
+                int(height - window.d_top - window.d_bottom)
+            )
         else:
             if Config.misc('original_decor'):
                 window.remove_decorations()

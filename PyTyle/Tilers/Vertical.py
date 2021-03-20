@@ -1,17 +1,10 @@
-"""
-Vertical.py
-
+'''
 The most basic and default tiling algorithm. It consists of a master pane
 on the left, and keeps the slaves over to the right.
 
 Remember that this class inherits _cycle, help_find_next, and help_find_previous
 from TileDefault.
-
-Note that if you're creating your own tiling algorithm, you *MUST* add
-    CLASS = CLASS_NAME
-at the bottom of your class definition file (see the bottom of this file
-for an example). This is so tiling algorithms can be dynamically loaded.
-"""
+'''
 
 
 from PyTyle.Tilers.TileDefault import TileDefault
@@ -51,12 +44,40 @@ class Vertical(TileDefault):
 
         # resize the master windows
         for master in masters:
-            self.help_resize(master, masterX, masterY, masterWidth, masterHeight, self.state.get('margin'))
+            self.help_resize(
+                master,
+                masterX,
+                masterY,
+                masterWidth,
+                masterHeight,
+                self.state.get('margin'),
+                self.state.get('internal_margin'),
+                {
+                    't': masterY != y,
+                    'l': False,
+                    'r': masterX + masterWidth < x + width,
+                    'b': masterY + masterHeight < y + height
+                }
+            )
             masterY += masterHeight
 
         # now resize the rest... keep track of heights/positioning
         for slave in slaves:
-            self.help_resize(slave, slaveX, slaveY, slaveWidth, slaveHeight, self.state.get('margin'))
+            self.help_resize(
+                slave,
+                slaveX,
+                slaveY,
+                slaveWidth,
+                slaveHeight,
+                self.state.get('margin'),
+                self.state.get('internal_margin'),
+                {
+                    't': slaveY != y,
+                    'l': slaveX != x,
+                    'r': False,
+                    'b': slaveY + slaveHeight < y + height
+                }
+            )
             slaveY += slaveHeight
 
     #

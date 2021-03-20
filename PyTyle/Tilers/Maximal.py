@@ -1,7 +1,7 @@
 from PyTyle.Tilers.TileDefault import TileDefault
 
 
-class Maximal (TileDefault):
+class Maximal(TileDefault):
     def _tile(self):
         x, y, width, height = self.screen.get_workarea()
 
