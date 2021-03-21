@@ -22,12 +22,12 @@ import traceback
 from PyTyle.TileStorage import TileStorage
 from PyTyle.TileState import TileState
 
+
 class Tile:
     #------------------------------------------------------------------------------
     # STATIC METHODS (DISPATCHER RELATED)
     #------------------------------------------------------------------------------
 
-    #
     # Initiate the dispatching routing.
     #
     # Has two contexts: Called with an action and called without.
@@ -43,7 +43,6 @@ class Tile:
     # binding to run its respective method. Make sure to fail if tiling isn't
     # enabled and we aren't calling tile. (Essentially, pressing the tile key
     # binding is the only way to enable tiling.)
-    #
     @staticmethod
     def dispatch(tiler, action = None, keycode = None, masks = None):
         if not action and keycode and masks:
@@ -86,7 +85,6 @@ class Tile:
     # CONSTRUCTOR AND GENERIC TILING METHODS
     #------------------------------------------------------------------------------
 
-    #
     # Constructor simply instantiates the TileStorage class and passes it the window filter.
     # Every tiling instance must be attached to a screen.
     #
@@ -97,29 +95,24 @@ class Tile:
     # sufficient here. Along with the helper methods help_find_next and help_find_previous.)
     # We also initialize this tiler's 'state'- this will automatically save certain things for
     # us, like the sizes of panes.
-    #
     def __init__(self, screen):
         self.screen = screen
         self.storage = TileStorage()
         self.cycleIndex = 0
         self.state = TileState(self)
 
-    #
     # The core of the tiling algorithm. This will be called whenever PyTyle senses
     # that a screen needs to be re-tiled. It is essentially the bread and butter of
     # your tiling algorithm. It is responsible for placing *all* masters and slaves
     # in the TileStorage on the screen (unless you desire other behavior, like a
     # limited number of windows, but the behavior could be unpredictable). See the
     # respective tile methods in the algorithms shipped with this release.
-    #
     def _tile(self):
         pass
 
-    #
     # There is probably no need to overload this one. It simply iterates over all
     # stored windows and resizes them back to their original geometry. Geometry is
     # mainly saved when a window is first created and maybe when it switches screens.
-    #
     def _untile(self):
         # resize all the windows back to their original x/y/width/height
         for window in self.storage.get_all():
@@ -135,39 +128,31 @@ class Tile:
                 window.origheight
             )
 
-    #
     # Tells PyTyle to reload the configuration file.
-    #
     def _reload(self):
         State.do_reload()
 
-    #
     # Does a hard reset of the current screen. It empties the tiling storage, reloads
     # the current screen (probes for all windows), and adds the screen to the tiling
     # queue. Hopefully shouldn't have to be used, but is worth trying before
     # restarting PyTyle.
-    #
     def _reset(self):
         self.storage = TileStorage()
         self.state.reset()
         self.cycleIndex = 0
         self.screen.needs_tiling()
 
-    #
     # Responsible for cycling all slaves through the master slot. If there are more
     # than one master, then simply use the first master slot. If there are no masters
     # then do nothing. The cycleIndex should be incremented (or decremented, depending
     # upon your algorithm) after the cycle, and you also need to reset it to 0 when it
     # reaches the end. You should use help_find_next and help_find_previous here.
-    #
     def _cycle(self):
         pass
 
-    #
-    # Simply puts focus on the given screen. The screen is responsible for providing
+    # Puts focus on the given screen. The screen is responsible for providing
     # the currently active window. If we don't have one, then don't do anything. Also,
     # immediately quit if the screen is the same as the current tiler screen.
-    #
     def _screen_focus(self, screen_num):
         # stop if current window...
         if self.screen.id == screen_num:
@@ -180,7 +165,6 @@ class Tile:
                 else:
                     screen.get_active().activate()
 
-    #
     # Moves the active window to the given screen. Immediately quit if the screen is
     # the same as the current tiler screen.
     #
@@ -196,7 +180,6 @@ class Tile:
     # must then update the screen object of the window we moved, and activate the *old*
     # screen. (Incidentally, I did it this way because that is the default behavior
     # of XMonad.)
-    #
     def _screen_put(self, screen_num):
         # stop if current screen...
         if self.screen.id == screen_num:
@@ -216,23 +199,18 @@ class Tile:
                 add.screen = screen
                 self.screen.get_active().activate()
 
-    #
     # Increases the area of the master pane. What this does is up to your tiling
     # algorithm. Pay special attention to the proper resizing of any other pane(s).
-    #
     def _master_increase(self):
         pass
 
-    #
     # Inverse of _master_increase.
     # _master_increase(_master_decrease(window placement)) = window placement
     # (Unless you set default pixel amounts of each method to be different... o_O)
-    #
     def _master_decrease(self):
         pass
 
-    #
-    # Simply adds a master to the storage and submits the current screen into the
+    # Adds a master to the storage and submits the current screen into the
     # tiling queue. It is possible that your tiling algorithm might not want to
     # support more than one master (ex. XMonad's Circle layout), and in that case,
     # simply overload the method and leave it empty. (Make sure to do the same for
@@ -242,7 +220,6 @@ class Tile:
     # window. If it is a slave or master, respectively, then that is the window that
     # will be added or removed. Otherwise, the first slave or master, respectively,
     # will be chosen arbitrarily.
-    #
     def _add_master(self):
         # use active window if it's a slave
         slaves = self.storage.get_slaves()
@@ -259,7 +236,6 @@ class Tile:
 
         self.screen.needs_tiling()
 
-    #
     # Inverse of _add_master.
     #
     # Note: If we somehow get a bigger master count than the number of windows (which
@@ -267,7 +243,6 @@ class Tile:
     # the counter until we get to the current number of windows.
     #
     # Note: TileStorage will not let the number of masters go below 0 (0 masters is fine).
-    #
     def _remove_master(self):
         # if we have too many windows, decrement master count until we're good...
         all = self.storage.get_all()
@@ -289,19 +264,14 @@ class Tile:
 
         self.screen.needs_tiling()
 
-    #
-    # A very simple method to make the current window the master. If there are more
-    # than one master, then use the first master. If there are no masters, then do
-    # nothing.
-    #
+    # Make the current window the master. If there are more than one master,
+    # then use the first master. If there are no masters, then do nothing.
     def _make_active_master(self):
         if self.storage.get_masters():
             self.help_switch(self.storage.get_masters()[0], self.screen.get_active())
 
-    #
-    # Simply put the focus on the master window. If there are more than one master,
+    # Put the focus on the master window. If there are more than one master,
     # then use the first master. If there are no masters, then do nothing.
-    #
     def _win_master(self):
         masters = self.storage.get_masters()
 
@@ -310,72 +280,55 @@ class Tile:
 
         masters[0].activate()
 
-    #
-    # Simply closes the current window.
-    #
+    # Closes the current window.
     # Note: We don't *really* need this method here. The window can be closed
     # in any way, and it will be detected by PyTyle. It's here mostly for
     # completeness.
-    #
     def _win_close(self):
         self.screen.get_active().close()
 
-    #
     # Focuses on the previous window.
-    #
     def _win_previous(self):
         self.help_find_previous().activate()
 
-    #
     # Focuses on the next window.
-    #
     def _win_next(self):
         self.help_find_next().activate()
 
-    #
     # Switches the current window with the previous window.
-    #
     def _switch_previous(self):
         previous = self.help_find_previous()
 
-        # only one window... bye
+        # only one window
         if previous.id == self.screen.get_active().id:
             return
 
         self.help_switch(previous, self.screen.get_active())
 
-    #
     # Switches the current window with the next window.
-    #
     def _switch_next(self):
         next = self.help_find_next()
 
-        # only one window... bye
+        # only one window
         if next.id == self.screen.get_active().id:
             return
 
         self.help_switch(next, self.screen.get_active())
 
-    #
     # Maximizes all windows managed by the tiler.
     #
     # Note: This sends a maximize request to the window manager. I'm not sure if this
     # is better than resizing the window to the full screen.
-    #
     def _max_all(self):
         for window in self.storage.get_all():
             window.maximize()
 
-    #
     # Restores all windows managed by the tiler.
-    #
     def _restore_all(self):
         for window in self.storage.get_all():
             window.restore()
 
-    #
     # A simple debugging tool. Only useful if PyTyle is running from a shell.
-    #
     def _query(self):
         print(State.get_wm_name(), self.screen.viewport.desktop, self.storage)
 
@@ -384,16 +337,12 @@ class Tile:
     # PRIVATE HELPER METHODS
     #------------------------------------------------------------------------------
 
-    #
     # Simply saves the position of all windows on this tiling screen.
-    #
     def help_save(self):
         for window in self.screen.windows.values():
             window.save_geometry()
 
-    #
     # Resizes the given window. Takes into account its decorations.
-    #
     def help_resize(self, window, x, y, width, height, margin = 0, intMargin = None, intBorders = {'t': False, 'l': False, 'r': False, 'b': False}):
         if intMargin == None:
             intMargin = margin
