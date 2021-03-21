@@ -398,28 +398,27 @@ class Tile:
         if intMargin == None:
             intMargin = margin
 
-        if margin > 0:
-            x += intMargin if intBorders['l'] else margin
-            y += intMargin if intBorders['t'] else margin
-            if intBorders['l']:
-                width -= intMargin
-            else:
-                width -= margin
+        x += intMargin if intBorders['l'] else margin
+        y += intMargin if intBorders['t'] else margin
+        if intBorders['l']:
+            width -= intMargin
+        else:
+            width -= margin
 
-            if intBorders['r']:
-                width -= intMargin
-            else:
-                width -= margin
+        if intBorders['r']:
+            width -= intMargin
+        else:
+            width -= margin
 
-            if intBorders['t']:
-                height -= intMargin
-            else:
-                height -= margin
+        if intBorders['t']:
+            height -= intMargin
+        else:
+            height -= margin
 
-            if intBorders['b']:
-                height -= intMargin
-            else:
-                height -= margin
+        if intBorders['b']:
+            height -= intMargin
+        else:
+            height -= margin
 
         if window.static:
             window.remove_static_property()
