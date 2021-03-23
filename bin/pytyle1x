@@ -25,6 +25,7 @@ def reload_config():
             exec(conFile.read())
     except FileNotFoundError:
         DEBUG.write('Configuration file ~/.pytylerc does not exist')
+        sys.exit(1)
 
 
 while not PROBE.is_wm_running():
