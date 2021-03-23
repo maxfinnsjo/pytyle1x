@@ -1,4 +1,5 @@
-import time, os, sys
+import time, os, sys, pathlib
+
 from PyTyle.Config import Config
 from PyTyle.State import State
 
@@ -28,4 +29,4 @@ class Debug:
         self._log.flush()
 
 
-DEBUG = Debug(os.getenv('HOME') + '/pytyle.log')
+DEBUG = Debug(str(pathlib.Path.home()) + '/pytyle.log')
