@@ -1,40 +1,23 @@
-# Example PyTyle config file, place in ~/.pytylerc
-
 Config.MISC = {
     'tilers': ['Vertical', 'Horizontal', 'HorizontalRows', 'Maximal', 'Cascade'],
-    'global_tiling': False,
+    'global_tiling': True,
     'timeout': 0.1,
     'decorations': True,
     'original_decor': True,
 }
 
 Config.KEYMAP = {
-    'Alt-A': 'tile.default',
-    'Alt-U': 'untile',
-    'Alt-Z': 'cycle_tiler',
-    'Alt-Q': 'reload',
-    'Alt-Shift-space': 'reset',
-    'Alt-C': 'cycle',
-    'Alt-W': 'screen0_focus',
-    'Alt-E': 'screen1_focus',
-    'Alt-R': 'screen2_focus',
-    'Alt-Shift-W': 'screen0_put',
-    'Alt-Shift-E': 'screen1_put',
-    'Alt-Shift-R': 'screen2_put',
-    'Alt-H': 'master_decrease',
-    'Alt-L': 'master_increase',
-    'Alt-period': 'add_master',
-    'Alt-comma': 'remove_master',
-    'Alt-Return': 'make_active_master',
-    'Alt-M': 'win_master',
-    'Alt-Shift-C': 'win_close',
-    'Alt-J': 'win_previous',
-    'Alt-K': 'win_next',
-    'Alt-Shift-J': 'switch_previous',
-    'Alt-Shift-K': 'switch_next'
+    'Super-A': 'tile.default',
+    'Super-U': 'untile',
+    'Super-Z': 'cycle_tiler',
+    'Super-R': 'reload',
+    'Super-Down': 'master_decrease',
+    'Super-Up': 'master_increase',
+    'Super-plus': 'add_master',
+    'Super-minus': 'remove_master',
+    'Super-Right': 'switch_previous',
+    'Super-Left': 'switch_next',
 }
-
-Config.WORKAREA = {}
 
 Config.FILTER = [
     'gmrun', 'gimp', 'download',
@@ -43,18 +26,18 @@ Config.FILTER = [
 Config.LAYOUT = {
     'Vertical': {
         'width_factor': 0.5,
-        'margin': 0,
-        'internal_margin': 0,
+        'margin': 24,
+        'internal_margin': 12
     },
 
     'Horizontal': {
         'height_factor': 0.5,
-        'margin': 0,
-        'internal_margin': 0,
+        'margin': 24,
+        'internal_margin': 12
     },
 
     'Maximal': {
-        'margin': 0,
+        'margin': 24
     },
 
     'Cascade': {
@@ -68,9 +51,9 @@ Config.LAYOUT = {
     'HorizontalRows': {
         'height_factor': 0.5,
         'row_size': 2,
-        'margin': 0,
-        'internal_margin': 0,
-    }
+        'margin': 24,
+        'internal_margin': 12
+    },
 }
 
 Config.TILING = {
