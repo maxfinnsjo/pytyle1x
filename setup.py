@@ -18,6 +18,6 @@ setuptools.setup(
         'Operating System :: POSIX :: Linux',
         'Topic :: Desktop Environment :: Window Managers'
     ],
-    scripts = ['bin/pytyle1x', '.pytylerc'],
+    scripts = ['bin/pytyle1x'],
     python_requires = '>=3.6',
 )
