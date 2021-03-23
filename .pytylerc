@@ -1,5 +1,11 @@
 Config.MISC = {
-    'tilers': ['Vertical', 'Horizontal', 'HorizontalRows', 'Maximal', 'Cascade'],
+    'tilers': [
+        'Vertical',
+        'Horizontal',
+        'HorizontalRows',
+        'Maximal',
+        'Cascade'
+    ],
     'global_tiling': True,
     'timeout': 0.1,
     'decorations': True,

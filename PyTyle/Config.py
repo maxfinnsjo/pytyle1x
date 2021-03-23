@@ -9,38 +9,19 @@ class Config:
     CALLBACKS = {}
     DEFAULTS = {
         'MISC': {
-            'tilers': ['Vertical', 'Horizontal', 'Maximal', 'Cascade'],
-            'global_tiling': False,
+            'tilers': [
+                'Vertical',
+                'Horizontal',
+                'HorizontalRows',
+                'Maximal',
+                'Cascade'
+            ],
+            'global_tiling': True,
             'timeout': 0.1,
             'decorations': True,
             'original_decor': True,
         },
-        'KEYMAP': {
-            'Alt-A': 'tile.default',
-            'Alt-U': 'untile',
-            'Alt-Z': 'cycle_tiler',
-            'Alt-Shift-space': 'reset',
-            'Alt-C': 'cycle',
-            'Alt-W': 'screen0_focus',
-            'Alt-E': 'screen1_focus',
-            'Alt-R': 'screen2_focus',
-            'Alt-Shift-W': 'screen0_put',
-            'Alt-Shift-E': 'screen1_put',
-            'Alt-Shift-R': 'screen2_put',
-            'Alt-H': 'master_decrease',
-            'Alt-L': 'master_increase',
-            'Alt-period': 'add_master',
-            'Alt-comma': 'remove_master',
-            'Alt-Return': 'make_active_master',
-            'Alt-M': 'win_master',
-            'Alt-Shift-C': 'win_close',
-            'Alt-J': 'win_previous',
-            'Alt-K': 'win_next',
-            'Alt-Shift-J': 'switch_previous',
-            'Alt-Shift-K': 'switch_next',
-            'Alt-X': 'max_all',
-            'Alt-S': 'restore_all',
-        },
+        'KEYMAP': {},
         'WORKAREA': {
             0: {
                 'top': 0,

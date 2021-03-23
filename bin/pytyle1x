@@ -24,7 +24,11 @@ def reload_config():
         with open(conPath, 'r') as conFile:
             exec(conFile.read())
     except FileNotFoundError:
-        DEBUG.write('Configuration file ~/.pytylerc does not exist')
+        with open('.pytylerc', 'r') as defaultFile:
+            with open(conPath, 'w') as conFile:
+                defaultConfig = defaultFile.read()
+                conFile.write(defaultConfig)
+                exec(defaultConfig)
 
 
 while not PROBE.is_wm_running():
