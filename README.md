@@ -1,3 +1,5 @@
+![](banner.png)
+
 PyTyle is an extremely versatile and extensible tiling manager that is meant
 to be used on top of EWMH window managers. Its feature set was modeled after
 the basic tiling features of XMonad.
