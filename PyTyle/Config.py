@@ -15,7 +15,6 @@ class Config:
             'decorations': True,
             'original_decor': True,
         },
-        'KEYMAP': {},
         'WORKAREA': {
             0: {
                 'top': 0,
@@ -24,9 +23,7 @@ class Config:
                 'left': 0,
             },
         },
-        'FILTER': [
-            'gmrun', 'gimp', 'download'
-        ],
+        'FILTER': ['gmrun', 'gimp', 'download'],
         'LAYOUT': {
             'Vertical': {
                 'width_factor': 0.5,
@@ -74,9 +71,6 @@ class Config:
     def keymap(keys):
         if keys in Config.KEYMAP:
             return Config.KEYMAP[keys]
-
-        if keys in Config.DEFAULTS['KEYMAP']:
-            return Config.DEFAULTS['KEYMAP'][keys]
 
         return None
 
