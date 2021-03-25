@@ -7,6 +7,6 @@ the basic tiling features of XMonad.
 This is a fork of the [original PyTyle](http://github.com/BurntSushi/pytyle1),
 adjusted to work with Python 3. Development continues, and you can expect optimizations, new features and bug fixes.
 
-Install with `pip install pytyle1x`. Check out [the wiki](https://github.com/programical/pytyle1x/wiki) for more details.
+Check out [the wiki](https://github.com/programical/pytyle1x/wiki) for installation instructions.
 
 ![](screenshot.png)
