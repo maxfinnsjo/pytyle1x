@@ -96,10 +96,6 @@ class Window:
         PROBE.window_add_decorations(self.xobj)
         self.static = True
 
-    # TODO: remove, let the main window manager handle this
-    def close(self):
-        PROBE.window_close(self.xobj)
-
     # Deletes the window from existence. It also makes sure to queue its screen
     # for tiling.
     def delete(self):

@@ -280,13 +280,6 @@ class Tile:
 
         masters[0].activate()
 
-    # Closes the current window.
-    # Note: We don't *really* need this method here. The window can be closed
-    # in any way, and it will be detected by PyTyle. It's here mostly for
-    # completeness.
-    def _win_close(self):
-        self.screen.get_active().close()
-
     # Focuses on the previous window.
     def _win_previous(self):
         self.help_find_previous().activate()
@@ -530,9 +523,6 @@ class Tile:
 
     def win_master(self):
         self._win_master()
-
-    def win_close(self):
-        self._win_close()
 
     def win_previous(self):
         self._win_previous()

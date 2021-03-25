@@ -503,15 +503,6 @@ class Probe:
         )
         self.get_display().flush()
 
-    # Closes the given window
-    def window_close(self, win):
-        self._send_event(
-            win,
-            self.atom('_NET_CLOSE_WINDOW'),
-            [X.CurrentTime]
-        )
-        self.get_display().flush()
-
     # This sets up the event mask on the given window. This will tell the
     # X server to send us only the events we're interested in (however,
     # we still get a boat load more than what we really care about).
