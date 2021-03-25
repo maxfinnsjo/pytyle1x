@@ -388,7 +388,6 @@ class Tile:
 
             window.resize(int(x), int(y), int(width - 2), int(height - 2))
 
-    #
     # Reloads the entire storage container underlying the tiling algorithm.
     # Unless you have really special needs, this should be sufficient. The
     # TilingStorage class handles master/slave balance for you according to
@@ -398,7 +397,6 @@ class Tile:
     # This method tries to update existing storage, although it doesn't assume
     # that there is currently any storage. Keep care to keep storage separate
     # from your tiling algorithm.
-    #
     def help_reload(self):
         # delete first...
         for win in self.storage.get_all():
@@ -421,28 +419,21 @@ class Tile:
             else:
                 self.storage.try_to_promote(window)
 
-    #
     # Simple method to switch two windows visually. It also takes care of
     # switching the windows in the storage container as well.
-    #
-    def help_switch(self, win1, win2):
-        # same? weird...
-        if win1.id == win2.id:
-            return
+    def help_switch(self, win1, win2):.
+        if win1.id != win2.id:
+            newpos = [win2.x, win2.y, win2.width, win2.height]
+            win2.resize(win1.x, win1.y, win1.width, win1.height)
+            win1.resize(newpos[0], newpos[1], newpos[2], newpos[3])
 
-        newpos = [win2.x, win2.y, win2.width, win2.height]
-        win2.resize(win1.x, win1.y, win1.width, win1.height)
-        win1.resize(newpos[0], newpos[1], newpos[2], newpos[3])
+            self.storage.switch(win1, win2)
 
-        self.storage.switch(win1, win2)
-
-    #
     # The help_find_next and help_find_previous helper methods must be implemented
     # in a sub class if the functionality is to be used. Tiling
     # algorithms can sort windows differently such that the next/previous
     # windows cannot be accurately predicted generally. Unfortunately, these
     # little guys can be a little bit of a pain to right. (Edge cases, meh.)
-    #
     def help_find_next(self):
         pass
 

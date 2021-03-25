@@ -3,6 +3,7 @@ from Xlib import X, XK, Xatom, Xutil, protocol
 from Xlib.ext import xinerama
 import sys, math
 
+
 class Probe:
     # There should only be one Probe instance at any given time. Upon init,
     # instantiate the display object and fetch the root window. We also need to
@@ -128,7 +129,7 @@ class Probe:
 
         return info
 
-    # Returns the current display object... Our connection to X.
+    # Returns the current display object - our connection to X.
     def get_display(self):
         return self._display
 
@@ -267,9 +268,11 @@ class Probe:
         # Another way to find the window name.
         if not winname:
             winname = win.get_full_property(Xatom.WM_NAME, 0)
-            if not winname: winname = ''
+            if not winname:
+                winname = ''
 
-        if winname: winname = winname.value
+        if winname:
+            winname = winname.value
 
         # Fetch the desktop that the window is on. We need this.
         #
@@ -336,12 +339,8 @@ class Probe:
             self.atom('_NET_WM_WINDOW_TYPE'),
             Xatom.ATOM
         )
-        hidden = False
 
-        if state and (self.atom('_NET_WM_STATE_HIDDEN') in state.value or self.atom('_NET_WM_STATE_SKIP_TASKBAR') in state.value or self.atom('_NET_WM_STATE_SKIP_PAGER') in state.value):
-            hidden = True
-        if dock and (self.atom('_NET_WM_WINDOW_TYPE_DOCK') in dock.value or self.atom('_NET_WM_WINDOW_TYPE_TOOLBAR') in dock.value or self.atom('_NET_WM_WINDOW_TYPE_MENU') in dock.value or self.atom('_NET_WM_WINDOW_TYPE_SPLASH') in dock.value or self.atom('_NET_WM_WINDOW_TYPE_DIALOG') in dock.value):
-            hidden = True
+        hidden = (state and (self.atom('_NET_WM_STATE_HIDDEN') in state.value or self.atom('_NET_WM_STATE_SKIP_TASKBAR') in state.value or self.atom('_NET_WM_STATE_SKIP_PAGER') in state.value)) or (dock and (self.atom('_NET_WM_WINDOW_TYPE_DOCK') in dock.value or self.atom('_NET_WM_WINDOW_TYPE_TOOLBAR') in dock.value or self.atom('_NET_WM_WINDOW_TYPE_MENU') in dock.value or self.atom('_NET_WM_WINDOW_TYPE_SPLASH') in dock.value or self.atom('_NET_WM_WINDOW_TYPE_DIALOG') in dock.value))
 
         # Construct the window data structure. This is passed to the
         # update_attributes method.
@@ -464,17 +463,13 @@ class Probe:
             X.GrabModeAsync
         )
 
-    # Simply checks if the xinerama extension is enabled.
+    # Checks if the xinerama extension is enabled.
     def has_xinerama(self):
-        if self.get_display().has_extension('XINERAMA'):
-            return True
-        return False
+        return self.get_display().has_extension('XINERAMA')
 
     # Checks to see if Compiz is running. It needs unique attention.
     def is_compiz(self):
-        if self.get_wm_name() == 'compiz':
-            return True
-        return False
+        return self.get_wm_name() == 'compiz'
 
     # Reports if the window manager is running or not
     def is_wm_running(self):
@@ -483,18 +478,6 @@ class Probe:
         except:
             return False
         return True
-
-    # I was using this method originally in the main event loop, but found it
-    # to be unnecessary after I polished up the get_window method and queried
-    # for information about a window being a transient, along with whether or
-    # not it was hidden. However, this method could still be potentially useful,
-    # although it is not currently being used.
-    def is_popup(self, window):
-        skip = window.get_full_property(self.atom('_NET_WM_STATE'), Xatom.ATOM)
-
-        if skip and (self.atom('_NET_WM_STATE_MODAL') in skip.value or self.atom('_NET_WM_STATE_SKIP_TASKBAR') in skip.value or window.get_wm_transient_for()):
-            return True
-        return False
 
     # Ungrabs a key (and all its modifiers). This allows us to dynamically reload
     # keybindings as PyTyle is running.
@@ -505,7 +488,7 @@ class Probe:
         self.get_root().ungrab_key(keycode, mask | X.Mod2Mask | X.LockMask)
 
     # Activates the given window. This will also pull it above all other
-    # windows. Remember to flush.
+    # windows.
     def window_activate(self, win):
         win.set_input_focus(X.RevertToNone, X.CurrentTime)
         self.window_stackabove(win)
@@ -513,12 +496,20 @@ class Probe:
 
     # Props to devilspie for this one.
     def window_add_decorations(self, win):
-        self._send_event(win, self.atom('_NET_WM_STATE'), [0, self.atom('_OB_WM_STATE_UNDECORATED')])
+        self._send_event(
+            win,
+            self.atom('_NET_WM_STATE'),
+            [0, self.atom('_OB_WM_STATE_UNDECORATED')]
+        )
         self.get_display().flush()
 
     # Closes the given window
     def window_close(self, win):
-        self._send_event(win, self.atom('_NET_CLOSE_WINDOW'), [X.CurrentTime])
+        self._send_event(
+            win,
+            self.atom('_NET_CLOSE_WINDOW'),
+            [X.CurrentTime]
+        )
         self.get_display().flush()
 
     # This sets up the event mask on the given window. This will tell the
@@ -573,7 +564,7 @@ class Probe:
         )
         self.get_display().flush()
 
-    # This simply 'unmaximizes' or 'restores' a window. We need to do this
+    # This 'unmaximizes' or 'restores' a window. We need to do this
     # every time we resize a window because it could have been maximized
     # by the user (which then could not be resized).
     def window_reset(self, win):
