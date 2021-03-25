@@ -1,33 +1,25 @@
-"""
-TileDefault.py
-
-TileDefault, in and of itself, cannot be used as a tiling algorithm. It
+'''
+TileDefault cannot be used as a tiling algorithm. It
 represents the methods that both the Vertical and Horizontal layouts have
 in common. Both Vertical and Horizontal are subclasses of TileDefault.
-"""
+'''
 
 from PyTyle.Tile import Tile
 
-class TileDefault (Tile):
-    #------------------------------------------------------------------------------
-    # OVERLOADED INSTANCE METHODS
-    #------------------------------------------------------------------------------
-
-    #
+class TileDefault(Tile):
     # The common algorithm to cycle through all slaves for both the Horizontal
     # and Vertical layouts. Note that if there is more than one master, the first
     # master window will be swapped out. Also note that this will do nothing if
     # there are either no slaves or no masters. There will be nothing to cycle.
-    #
     def _cycle(self):
         slaves = self.storage.get_slaves()
         masters = self.storage.get_masters()
 
-        # Stop if neither of either... haha
+        # Stop if neither of either
         if not slaves or not masters:
             return
 
-        # Might be a little high...
+        # Might be a little high
         if self.cycleIndex >= len(slaves):
             self.cycleIndex = len(slaves) - 1
 
@@ -38,19 +30,11 @@ class TileDefault (Tile):
         self.cycleIndex = self.cycleIndex + 1
         if self.cycleIndex == len(slaves): self.cycleIndex = 0
 
-
-    #------------------------------------------------------------------------------
-    # OVERLOADED PRIVATE HELPER METHODS
-    #------------------------------------------------------------------------------
-
-    #
     # Finds the next window. This is used both by the win_next and switch_next
     # tiling actions. It's a bit hairy, so I've commented the code as we go.
-    #
     def help_find_next(self):
         masters = self.storage.get_masters()
         slaves = self.storage.get_slaves()
-        all = masters + slaves
 
         # If there are masters, then we need to check if the currently
         # active window is the first master. If so, then we need to
@@ -82,12 +66,11 @@ class TileDefault (Tile):
                     return masters[(i - 1)]
 
     # See help_find_next above. Also see the comments in the code,
-    # as help_find_previous is basically the same thing- we're just
+    # as help_find_previous is basically the same thing - we're just
     # going in reverse.
     def help_find_previous(self):
         masters = self.storage.get_masters()
         slaves = self.storage.get_slaves()
-        all = masters + slaves
 
         if masters and self.screen.get_active().id == masters[-1].id:
             if not slaves:

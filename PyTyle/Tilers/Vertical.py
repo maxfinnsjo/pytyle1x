@@ -6,26 +6,56 @@ Remember that this class inherits _cycle, help_find_next, and help_find_previous
 from TileDefault.
 '''
 
-
 from PyTyle.Tilers.TileDefault import TileDefault
 
 
 class Vertical(TileDefault):
-    #------------------------------------------------------------------------------
-    # OVERLOADED INSTANCE METHODS
-    #------------------------------------------------------------------------------
+    # Direction -1 for decrease, 1 for increase
+    def master_resize(self, direction: int, factor: float):
+        x, y, width, height = self.screen.get_workarea()
+        slaves = self.storage.get_slaves()
+        masters = self.storage.get_masters()
 
-    #
+        # Stop if neither of either
+        if not slaves or not masters:
+            return
+
+        # first calculate pixels
+        if direction > 0:
+            pixels = int(
+                ((self.state.get('width_factor') + factor) * width)
+                    - (self.state.get('width_factor') * width)
+            )
+        else:
+            pixels = int(
+                (self.state.get('width_factor') * width)
+                    - ((self.state.get('width_factor') - factor) * width)
+            )
+
+        self.state.set(
+            'width_factor',
+            self.state.get('width_factor') + factor * direction
+        )
+
+        for slave in slaves:
+            slave.resize(
+                slave.x + pixels * direction,
+                slave.y,
+                slave.width - pixels * direction,
+                slave.height
+            )
+        for master in masters:
+            master.resize(
+                master.x,
+                master.y,
+                master.width + pixels * direction,
+                master.height
+            )
+
     # The core tiling algorithm. Every core tiling algorithm should start with
     # grabbing the current screen's workarea and factoring that into your
     # calculations. Feel free to follow my approach to tiling algorithms, or
     # come up with something else.
-    #
-    # Note: As I've been going through the source code writing these comments,
-    # I've been thinking about generalizing tiling algorithms even more. So this
-    # approach could change a little in the future. (Although I imagine the class
-    # hierarchy will be staying the same, I like it.)
-    #
     def _tile(self):
         x, y, width, height = self.screen.get_workarea()
 
@@ -80,53 +110,13 @@ class Vertical(TileDefault):
             )
             slaveY += slaveHeight
 
-    #
-    # Increases the width of all master windows. Don't forget to decrease
-    # the width of all slave windows. Won't do anything if there are either
-    # no masters or no slaves.
-    #
+    # Increases the width of all master windows.
     def _master_increase(self, factor = 0.05):
-        x, y, width, height = self.screen.get_workarea()
+        self.master_resize(1, factor)
 
-        slaves = self.storage.get_slaves()
-        masters = self.storage.get_masters()
-
-        # Stop if neither of either... haha
-        if not slaves or not masters:
-            return
-
-        # first calculate pixels...
-        pixels = int(((self.state.get('width_factor') + factor) * width) - (self.state.get('width_factor') * width))
-        self.state.set('width_factor', self.state.get('width_factor') + factor)
-
-        for slave in slaves:
-            slave.resize(slave.x + pixels, slave.y, slave.width - pixels, slave.height)
-        for master in masters:
-            master.resize(master.x, master.y, master.width + pixels, master.height)
-
-    #
-    # Decreases the width of all master windows. Don't forget to increase
-    # the width of all slave windows. Won't do anything if there are either
-    # no masters or no slaves.
-    #
+    # Decreases the width of all master windows.
     def _master_decrease(self, factor = 0.05):
-        x, y, width, height = self.screen.get_workarea()
-
-        slaves = self.storage.get_slaves()
-        masters = self.storage.get_masters()
-
-        # Stop if neither of either... haha
-        if not slaves or not masters:
-            return
-
-        # first calculate pixels...
-        pixels = int((self.state.get('width_factor') * width) - ((self.state.get('width_factor') - factor) * width))
-        self.state.set('width_factor', self.state.get('width_factor') - factor)
-
-        for slave in slaves:
-            slave.resize(slave.x - pixels, slave.y, slave.width + pixels, slave.height)
-        for master in masters:
-            master.resize(master.x, master.y, master.width - pixels, master.height)
+        self.master_resize(-1, factor)
 
 
 CLASS = Vertical

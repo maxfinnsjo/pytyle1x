@@ -113,7 +113,6 @@ try:
                 DEBUG.write(traceback.format_exc())
         elif e.is_screen_change():
             DEBUG.write('Wiping the current state...')
-
             time.sleep(3)
 
             try:
