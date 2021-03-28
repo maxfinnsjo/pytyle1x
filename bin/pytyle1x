@@ -29,15 +29,12 @@ def reload_config():
         sys.exit(1)
 
 
-while not PROBE.is_wm_running():
-    time.sleep(1)
-time.sleep(1)
-
-
-reload_config()
-
-
 try:
+    while not PROBE.is_wm_running():
+        time.sleep(1)
+    time.sleep(1)
+
+    reload_config()
     reload_tilers()
     State.register_hotkeys()
     Desktop.load_desktops()
