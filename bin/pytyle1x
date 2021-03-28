@@ -84,9 +84,9 @@ try:
                 continue
 
             try:
-                wins = State.get_windows().values()
+                wins = State.get_windows().copy().values()
                 newWins = State.scan_all_windows()
-                # FIXME RuntimeError: dictionary changed size during iteration
+
                 for win in wins:
                     if int(win.id, 0) not in newWins:
                         win.delete()
@@ -121,6 +121,8 @@ try:
             except:
                 DEBUG.write('Could not properly handle screen change')
                 DEBUG.write(traceback.format_exc())
+except KeyboardInterrupt:
+    DEBUG.write('Pytyle shut down.')
 except:
     DEBUG.write('Fatal error!')
     DEBUG.write(traceback.format_exc())
