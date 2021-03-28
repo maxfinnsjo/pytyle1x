@@ -28,10 +28,10 @@ class Cascade(TileDefault):
         if self.state.get('horz_align') == 'right':
             push_over = -push_over
 
-        masterWidth = (width * self.state.get('width_factor'))
-            - (push_width * len(slaves))
-        masterHeight = (height * self.state.get('height_factor'))
-            - (decor * len(slaves))
+        masterWidth = ((width * self.state.get('width_factor'))
+            - (push_width * len(slaves)))
+        masterHeight = ((height * self.state.get('height_factor'))
+            - (decor * len(slaves)))
         masterY = y + (decor * len(slaves))
 
         slaveWidth = width * self.state.get('width_factor')

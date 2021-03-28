@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-import time, sys, os, traceback, pathlib
+import time, os, traceback, pathlib
 
 from PyTyle.Config import Config
 from PyTyle.State import State
@@ -26,7 +26,6 @@ def reload_config():
             exec(conFile.read())
     except FileNotFoundError:
         DEBUG.write('Configuration file ~/' + conLocation + ' does not exist')
-        sys.exit(1)
 
 
 try:
@@ -34,6 +33,7 @@ try:
         time.sleep(1)
     time.sleep(1)
 
+    DEBUG.write('PyTyle started.')
     reload_config()
     reload_tilers()
     State.register_hotkeys()
@@ -84,10 +84,11 @@ try:
                 continue
 
             try:
-                newwins = State.scan_all_windows()
+                wins = State.get_windows().values()
+                newWins = State.scan_all_windows()
                 # FIXME RuntimeError: dictionary changed size during iteration
-                for win in State.get_windows().values():
-                    if int(win.id, 0) not in newwins:
+                for win in wins:
+                    if int(win.id, 0) not in newWins:
                         win.delete()
             except:
                 DEBUG.write('Could not properly handle window destruction')
@@ -123,4 +124,3 @@ try:
 except:
     DEBUG.write('Fatal error!')
     DEBUG.write(traceback.format_exc())
-    sys.exit(1)

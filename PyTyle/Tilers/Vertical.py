@@ -23,13 +23,13 @@ class Vertical(TileDefault):
         # first calculate pixels
         if direction > 0:
             pixels = int(
-                ((self.state.get('width_factor') + factor) * width)
-                    - (self.state.get('width_factor') * width)
+                (((self.state.get('width_factor') + factor) * width)
+                    - (self.state.get('width_factor') * width))
             )
         else:
             pixels = int(
-                (self.state.get('width_factor') * width)
-                    - ((self.state.get('width_factor') - factor) * width)
+                ((self.state.get('width_factor') * width)
+                    - ((self.state.get('width_factor') - factor) * width))
             )
 
         self.state.set(

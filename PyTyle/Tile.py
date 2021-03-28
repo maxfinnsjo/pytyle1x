@@ -414,7 +414,7 @@ class Tile:
 
     # Simple method to switch two windows visually. It also takes care of
     # switching the windows in the storage container as well.
-    def help_switch(self, win1, win2):.
+    def help_switch(self, win1, win2):
         if win1.id != win2.id:
             newpos = [win2.x, win2.y, win2.width, win2.height]
             win2.resize(win1.x, win1.y, win1.width, win1.height)

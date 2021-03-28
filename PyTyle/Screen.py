@@ -84,10 +84,10 @@ class Screen:
             if 0 in Config.WORKAREA:
                 x = self.x + Config.workarea(0, 'left')
                 y = self.y + Config.workarea(0, 'top')
-                height = self.height - Config.workarea(0, 'bottom')
-                    + Config.workarea(0, 'top')
-                width = self.width - Config.workarea(0, 'right')
-                    + Config.workarea(0, 'left')
+                height = (self.height - Config.workarea(0, 'bottom')
+                    + Config.workarea(0, 'top'))
+                width = (self.width - Config.workarea(0, 'right')
+                    + Config.workarea(0, 'left'))
             else:
                 if PROBE.is_compiz():
                     x = self.viewport.x
@@ -108,10 +108,10 @@ class Screen:
             # Factor in manual docks...
             x += Config.workarea(self.id, 'left')
             y += Config.workarea(self.id, 'top')
-            height -= Config.workarea(self.id, 'bottom')
-                + Config.workarea(self.id, 'top')
-            width -= Config.workarea(self.id, 'right')
-                + Config.workarea(self.id, 'left')
+            height -= (Config.workarea(self.id, 'bottom')
+                + Config.workarea(self.id, 'top'))
+            width -= (Config.workarea(self.id, 'right')
+                + Config.workarea(self.id, 'left'))
 
         return (x, y, width, height)
 

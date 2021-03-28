@@ -88,10 +88,10 @@ class Desktop:
     # and each window on each screen. See the string representations of
     # screen and window.
     def __str__(self):
-        retval = self.name + ' - [ID: ' + str(self.id) + ', RES: '
+        retval = (self.name + ' - [ID: ' + str(self.id) + ', RES: '
             + str(self.resx) + 'x' + str(self.resy) + ', X: ' + str(self.x)
             + ', Y: ' + str(self.y) + ', WIDTH: ' + str(self.width)
-            + ', HEIGHT: ' + str(self.height) + ']\n'
+            + ', HEIGHT: ' + str(self.height) + ']\n')
 
         for viewport in self.viewports.values():
             retval += '\t' + str(viewport) + '\n'

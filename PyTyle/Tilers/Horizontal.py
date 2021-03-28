@@ -85,12 +85,12 @@ class Horizontal(TileDefault):
 
         # first calculate pixels...
         pixels = int(
-            ((self.state.get('height_factor') + factor) * height)
-                - (self.state.get('height_factor') * height)
+            (((self.state.get('height_factor') + factor) * height)
+                - (self.state.get('height_factor') * height))
         )
         self.state.set(
             'height_factor',
-            self.state.get('height_factor') + factor'
+            self.state.get('height_factor') + factor
         )
 
         for slave in slaves:

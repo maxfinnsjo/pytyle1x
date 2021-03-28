@@ -30,13 +30,13 @@ class HorizontalRows(TileDefault):
         # first calculate pixels
         if direction > 0:
             pixels = int(
-                ((self.state.get('height_factor') + factor) * height)
-                    - (self.state.get('height_factor') * height)
+                (((self.state.get('height_factor') + factor) * height)
+                    - (self.state.get('height_factor') * height))
             )
         else:
             pixels = int(
-                (self.state.get('height_factor') * height)
-                    - ((self.state.get('height_factor') - factor) * height)
+                ((self.state.get('height_factor') * height)
+                    - ((self.state.get('height_factor') - factor) * height))
             )
 
         self.state.set(
