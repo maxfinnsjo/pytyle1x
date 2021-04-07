@@ -284,6 +284,7 @@ class Probe:
         if windesk:
             windesk = windesk.value[0]
         else:
+            print('Warning: assuming desktop 0 for window', winname)
             windesk = 0 # might cause problems
 
         # Fetch the window geometry- see the method below for more info.
