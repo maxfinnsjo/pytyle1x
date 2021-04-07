@@ -274,16 +274,17 @@ class Probe:
         if winname:
             winname = winname.value
 
-        # Fetch the desktop that the window is on. We need this.
-        #
-        # *However* - This could change in the future if we want to support
-        # viewports instead of desktops (*ahem* compiz *ahem*). We might need
-        # to calculate the 'desktop' based on the window's x,y coordinates
-        # in the future. (Like we do for screens.)
+        # Fetch the desktop that the window is on.
         windesk = win.get_full_property(
             self.atom('_NET_WM_DESKTOP'),
             0
-        ).value[0]
+        )
+
+        # mutter/budgie-wm sometimes refuses to tell us the desktop
+        if windesk:
+            windesk = windesk.value[0]
+        else:
+            windesk = 0 # might cause problems
 
         # Fetch the window geometry- see the method below for more info.
         wingeom = self.get_window_geometry(win)
