@@ -4,7 +4,7 @@ import setuptools, sys
 
 setuptools.setup(
     name = 'pytyle1x',
-    version = '1.0.0',
+    version = '1.0.1',
     author = 'programical',
     description = 'A tiling manager for EWMH compliant window managers',
     long_description = open('README.md', 'r').read(),
