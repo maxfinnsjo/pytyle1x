@@ -97,7 +97,7 @@ class State:
     # Reports whether the tiling queue is empty or not.
     @staticmethod
     def queue_has_screens():
-        return True if State._TO_TILE else False
+        return len(State._TO_TILE) > 0
 
     # Adds a screen to the tiling queue. (You shouldn't use this method
     # directly to queue up a screen, but rather, the 'needs_tiling' method
@@ -189,12 +189,7 @@ class State:
     # them.
     @staticmethod
     def scan_all_windows():
-        ret = []
-        windows = PROBE.get_window_list()
-        for window in windows:
-            ret.append(window)
-
-        return ret
+        return [w for w in PROBE.get_window_list()] # .copy()?
 
     # There are problems with using the window given via the CreateNotify event
     # type, and thus, PyTyle currently listens for that event and scans for new
